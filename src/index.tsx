@@ -271,7 +271,11 @@ export default class Table extends React.Component<Iprop, ItableState > {
           <ThreeDotsvg />
         </div>
 
-        <SearchForm search_string={this.state.search_string} searchChange={this.searchChange} />
+        {
+          (props.show_search !== false &&
+          <SearchForm search_string={this.state.search_string} searchChange={this.searchChange} />
+          )
+        }
         <div className="overflow-x-auto mt-3">
 
           <table className="table-auto border-collapse w-full">

@@ -28,7 +28,8 @@ export interface Iprop {
 	per_page?: number,
 	no_content_text?: string,
 	debounce_search?: number,
-	table_header?:string
+	table_header?:string,
+	show_search?:boolean
 }
 
 

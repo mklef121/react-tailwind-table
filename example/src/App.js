@@ -47,7 +47,7 @@ class App extends React.Component {
   }
 
   render() {
-    return <Table columns={this.state.columns} rows={this.state.rows} per_page={3} table_header="Test Table" row_render ={this.rowcheck}/>
+    return <Table columns={this.state.columns} rows={this.state.rows} per_page={3} table_header="Test Table" show_search = {true} row_render ={this.rowcheck}/>
   }
 }
 
