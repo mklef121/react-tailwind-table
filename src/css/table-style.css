@@ -1,0 +1,7 @@
+
+thead tr th:first-child { border-top-left-radius: 10px; border-bottom-left-radius: 10px;}
+thead tr th:last-child { border-top-right-radius: 10px; border-bottom-right-radius: 10px;}
+
+tbody tr td:first-child { border-top-left-radius: 5px; border-bottom-left-radius: 0px;}
+tbody tr td:last-child { border-top-right-radius: 5px; border-bottom-right-radius: 0px;}
+

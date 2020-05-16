@@ -1,10 +1,19 @@
-import React from 'react'
+import * as React from 'react'
+// import styles from './styles.module.css'
+import Table from "./table";
+interface Props {
+  text: string
+}
 
-import Table from 'react-tailwind-table'
-import 'react-tailwind-table/dist/index.css'
+// <div className={styles.test}>Example Component here fuka pukkenb: {text}</div>
+export const ExampleComponent = ({ text }: Props) => {
 
-const App = () => {
-	return <Table columns={column()} rows={fakePlayers()} table_header="Test Table" />
+  return (<React.Fragment>
+  	
+  	<Table columns={column()} rows={fakePlayers()} table_header="Test Table" />
+  	</React.Fragment>)
+
+  
 }
 
 
@@ -93,5 +102,3 @@ const App = () => {
       }
     }];
   }
-
-export default App
