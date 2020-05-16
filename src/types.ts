@@ -19,7 +19,7 @@ export interface Irow {
 
 export type RowArray = Irow[];
 
-export type renderFunction = (row: Irow, col: Icolumn) => JSX.Element;
+export type renderFunction = (row: Irow, col: Icolumn,display_value:string) => JSX.Element;
 
 export interface Iprop {
 	rows: Irow[],

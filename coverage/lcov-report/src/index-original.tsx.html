@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/types.ts</title>
+    <title>Code coverage report for src/index-original.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../prettify.css" />
     <link rel="stylesheet" href="../base.css" />
@@ -18,18 +18,18 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> types.ts</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> index-original.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
                 <span class='fraction'>0/0</span>
             </div>
@@ -38,14 +38,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -158,7 +158,9 @@
 <a name='L100'></a><a href='#L100'>100</a>
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L103'></a><a href='#L103'>103</a>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -166,7 +168,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -178,6 +182,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,6 +203,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -258,110 +264,110 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as React from 'react';
-&nbsp;
-export interface Icolumn {
-	field: string, //This field can have a full stop(.) will allow us to read further into objects
-	use: string, //This will be used to display in the table heading
-&nbsp;
-	//Indicates of this guy should be used to search
-	use_in_search?: boolean,
-&nbsp;
-	//Indicates If this should be used in displaying data
-	use_in_display?: boolean,
-&nbsp;
-};
-&nbsp;
-//The sample of Row to be returned
-export interface Irow {
-	[key: string]: any
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import * as React from 'react'
+// import styles from './styles.module.css'
+import Table from "./table";
+interface Props {
+  text: string
 }
 &nbsp;
-export type RowArray = Irow[];
+// &lt;div className={styles.test}&gt;Example Component here fuka pukkenb: {text}&lt;/div&gt;
+export const ExampleComponent = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> text }: Props) =&gt; {</span>
 &nbsp;
-export type renderFunction = (row: Irow, col: Icolumn) =&gt; JSX.Element;
+<span class="cstat-no" title="statement not covered" >  return (&lt;React.Fragment&gt;</span>
+  	
+  	&lt;Table columns={column()} rows={fakePlayers()} table_header="Test Table" /&gt;
+  	&lt;/React.Fragment&gt;)
 &nbsp;
-export interface Iprop {
-	rows: Irow[],
-	columns: Icolumn[],
-	row_render?: renderFunction,
-	per_page?: number,
-	no_content_text?: string,
-	debounce_search?: number,
-	table_header?:string
+  
 }
 &nbsp;
 &nbsp;
-/**
- * Interface describing data after the active page has been set
- * @props pagination: Has the full paginated data for the rows prop
- * @props back_button_clickable: indicates if back button is clickable
- * @props forward_button_clickable: Dictates if the forward button is clickable
- * @props current_rows: The rows to be shown in the table(The current page rows)
- * @props active_page_number: The currently selected page number
- * @param {string} search_string: The Text used in the search field
- *
- */
-export interface ItableState {
-&nbsp;
-	pagination: ItableLinks,
-	back_button_clickable: boolean,
-	forward_button_clickable: boolean,
-	current_rows: Irow[],
-	active_page_number: number,
-	search_string: string,
-&nbsp;
-}
 &nbsp;
 &nbsp;
-//Interface describing how the object holding our page number data will look like
-export interface IpageNum {
-	[key: number]: {
-		page_row_array: Irow[]
-		back_button_clickable: boolean,
-		forward_button_clickable: boolean,
-		//determine if this page is the currently active page
-		is_active: boolean
-	}
-}
+ function <span class="fstat-no" title="function not covered" >column(</span>) {
+<span class="cstat-no" title="statement not covered" >    return [</span>
+      {
+        field: "front_end_position.name",
+        use: "Position"
+      },
+      {
+        // use_in_display: false,
+        field: "name", //Object destructure
+        use: "Name"
+      },
 &nbsp;
-export interface ItableLinks {
-	//An array to store the page numbers
-	page_number_store: number[],
-	page_map: IpageNum,
-&nbsp;
-	//This is all rows That are is either a copy of
-	// props.rows or is the rows Filtered when a search occurs
-	all_rows: Irow[]
-}
-&nbsp;
-export interface InavComponProp {
-	//An array to store the page numbers
-	back_button_clickable: boolean,
-	forward_button_clickable: boolean,
-}
-&nbsp;
-export interface IpageActiveSet {
-	table_links: ItableLinks,
-	back_button_clickable: boolean,
-	forward_button_clickable: boolean,
-	current_rows: Irow[],
-	active_page_number: number
-&nbsp;
-}
+      {
+        field: "created_at",
+        use: "Action",
+        // use_in_search:false
+      }]
+  }
 &nbsp;
 &nbsp;
-export interface IpaginateProps extends ItableState {
-	backButtonOnclick: (event: React.MouseEvent) =&gt; void,
-	forwardButtonOnclick: (event: React.MouseEvent) =&gt; void,
-	pageNumberClick: (event: React.MouseEvent, page_number: number) =&gt; void,
+  function <span class="fstat-no" title="function not covered" >fakePlayers(</span>){
 &nbsp;
-}
-&nbsp;
-&nbsp;
-export type stringObj = { [key: string]: any };
+<span class="cstat-no" title="statement not covered" >    return [{</span>
+      id: 1,
+      name: "Sadio Mane",
+      country_id: 3,
+      club_id: 2,
+      position_id: 1,
+      shirt_number: "10",
+      created_by: 2,
+      deleted_at: null,
+      created_at: "12/12/12 15:00:00",
+      updated_at: "12/12/12 15:00:00",
+      is_defender: false,
+      is_midfielder: false,
+      is_forward: true,
+      is_goalkeeper: false,
+      front_end_position:{
+        name:"attach",
+        id:2
+      }
+    },
+    {
+      id: 2,
+      name: "Mohammed Sala",
+      country_id: 3,
+      club_id: 2,
+      position_id: 1,
+      shirt_number: "11",
+      created_by: 2,
+      deleted_at: null,
+      created_at: "12/12/12 15:00:00",
+      updated_at: "12/12/12 15:00:00",
+      is_defender: false,
+      is_midfielder: false,
+      is_forward: true,
+      is_goalkeeper: false,
+      front_end_position:{
+        name:"Forward",
+        id:4
+      }
+    },
+    {
+      id: 3,
+      name: "Robertor Fermino",
+      country_id: 3,
+      club_id: 2,
+      position_id: 1,
+      shirt_number: "8",
+      created_by: 2,
+      deleted_at: null,
+      created_at: "12/12/12 15:00:00",
+      updated_at: "12/12/12 15:00:00",
+      is_defender: false,
+      is_midfielder: false,
+      is_forward: true,
+      is_goalkeeper: false,
+      front_end_position:{
+        name:"Defence",
+        id:9
+      }
+    }];
+  }
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->

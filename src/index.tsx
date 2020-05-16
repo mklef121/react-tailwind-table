@@ -380,13 +380,12 @@ function SearchForm(props: { search_string: string, searchChange: (event: React.
 
 function TableData(props: { col: Icolumn, row: Irow, render?: renderFunction }) {
 
-
-
+  var display_value = utils.unwindObject(props.row, props.col.field);
   return (
     <td className="px-4 py-4">
 
       {
-        (props.render && props.render(props.row, props.col)) || utils.unwindObject(props.row, props.col.field)
+        (props.render && props.render(props.row, props.col, display_value)) || display_value
       }
     </td>
   )

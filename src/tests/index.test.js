@@ -1,6 +1,6 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
-import Table from '../table'
+import Table from '../index'
 import { act } from 'react-dom/test-utils'
 
 describe('Table Component', () => {

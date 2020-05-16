@@ -79,7 +79,6 @@ export default class utils {
 
 		recuObje = recuObje[fields[rolled_time]];
 
-		// console.log(rolled_time,recuObje,field)
 		rolled_time++;
 	}
 

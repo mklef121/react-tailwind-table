@@ -6,7 +6,9 @@ module.exports = {
       './src/**/*.html',
       './src/**/*.vue',
       './src/**/*.jsx',
-      './src/**/*.tsx'
+      './src/**/*.tsx',
+      './example/src/**/*.js',
+      './example/src/**/*.tsx'
     ]
   },
   theme: {

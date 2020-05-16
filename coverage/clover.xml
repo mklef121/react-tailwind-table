@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1589632153080" clover="3.2.0">
-  <project timestamp="1589632153080" name="All files">
-    <metrics statements="169" coveredstatements="120" conditionals="107" coveredconditionals="52" methods="49" coveredmethods="29" elements="325" coveredelements="201" complexity="0" loc="169" ncloc="169" packages="3" files="7" classes="7"/>
+<coverage generated="1589650113907" clover="3.2.0">
+  <project timestamp="1589650113907" name="All files">
+    <metrics statements="172" coveredstatements="119" conditionals="107" coveredconditionals="52" methods="51" coveredmethods="29" elements="330" coveredelements="200" complexity="0" loc="172" ncloc="172" packages="4" files="8" classes="8"/>
     <package name="src">
-      <metrics statements="79" coveredstatements="46" conditionals="36" coveredconditionals="12" methods="27" coveredmethods="16"/>
-      <file name="index.tsx" path="/var/www/react-tailwind-table/src/index.tsx">
-        <metrics statements="4" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
-        <line num="9" count="1" type="stmt"/>
+      <metrics statements="79" coveredstatements="45" conditionals="36" coveredconditionals="12" methods="27" coveredmethods="16"/>
+      <file name="index-original.tsx" path="/var/www/react-tailwind-table/src/index-original.tsx">
+        <metrics statements="4" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="0"/>
+        <line num="9" count="0" type="stmt"/>
         <line num="11" count="0" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="44" count="0" type="stmt"/>
       </file>
-      <file name="table.tsx" path="/var/www/react-tailwind-table/src/table.tsx">
+      <file name="index.tsx" path="/var/www/react-tailwind-table/src/index.tsx">
         <metrics statements="75" coveredstatements="45" conditionals="36" coveredconditionals="12" methods="24" coveredmethods="16"/>
-        <line num="37" count="2" type="stmt"/>
-        <line num="44" count="2" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="44" count="1" type="stmt"/>
         <line num="56" count="3" type="stmt"/>
         <line num="58" count="3" type="stmt"/>
         <line num="60" count="3" type="stmt"/>
@@ -108,6 +108,15 @@
         <line num="6" count="4" type="stmt"/>
       </file>
     </package>
+    <package name="src.tests">
+      <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+      <file name="rubishtest.tsx" path="/var/www/react-tailwind-table/src/tests/rubishtest.tsx">
+        <metrics statements="3" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <line num="3" count="0" type="stmt"/>
+        <line num="4" count="0" type="stmt"/>
+        <line num="5" count="0" type="stmt"/>
+      </file>
+    </package>
     <package name="src.utilities">
       <metrics statements="87" coveredstatements="71" conditionals="65" coveredconditionals="36" methods="19" coveredmethods="10"/>
       <file name="utils.ts" path="/var/www/react-tailwind-table/src/utilities/utils.ts">
@@ -120,9 +129,9 @@
         <line num="24" count="2" type="stmt"/>
         <line num="29" count="7" type="cond" truecount="2" falsecount="0"/>
         <line num="32" count="7" type="cond" truecount="4" falsecount="0"/>
-        <line num="44" count="3" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
         <line num="45" count="1" type="stmt"/>
-        <line num="54" count="3" type="stmt"/>
+        <line num="54" count="2" type="stmt"/>
         <line num="55" count="1" type="stmt"/>
         <line num="67" count="24" type="stmt"/>
         <line num="68" count="24" type="stmt"/>
@@ -196,7 +205,7 @@
         <line num="324" count="0" type="stmt"/>
         <line num="339" count="0" type="stmt"/>
         <line num="341" count="0" type="stmt"/>
-        <line num="345" count="3" type="stmt"/>
+        <line num="345" count="2" type="stmt"/>
         <line num="348" count="0" type="stmt"/>
         <line num="361" count="0" type="stmt"/>
       </file>
