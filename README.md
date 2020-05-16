@@ -9,10 +9,10 @@
 
 The core of the component is written in Typescript: Which brings alive the usage of `Typings` in this documentation. 
 A few features that comes with this table include
-	1)	Pagination
-	2)	Search
-	3)	Responsiveness
-	4)	Customizable table data display
+-	1) 	Pagination
+-	2)	Search
+-	3)	Responsiveness
+-	4)	Customizable table data display
 
 
 > Contents
@@ -65,7 +65,7 @@ interface Iprop {
 }
 ```
 
-## Rows
+### Rows
 
 The rows prop determine the number of table rows available in the `<tbody/>` tag. This must be an array and is enforced using reacts `prop-types`  "PropTypes.array.isRequired" props checker.
 
@@ -78,14 +78,72 @@ interface Irow {
 }
 
 type Irows  = Irow[]
+
+//The full data format can be
+var rows:Irows  = [
+{
+      id: 1,
+      name: "Sadio Mane",
+      country_id: 3,
+      club_id: 2,
+      front_end_position:{
+        name:{
+        	full_name:"Forward",
+        	short_code:"FW"
+        },
+        id:2
+      }
+},
+{
+      id: 3,
+      name: "Virgil VanDijk",
+      country_id: 30,
+      club_id: 2,
+      front_end_position:{
+        name:{
+        	full_name:"Defence",
+        	short_code:"DF"
+        },
+        id:2
+      }
+}
+]
 ```
 
 
-## Columns
+### Columns
 
-The "columns" props determines the details of the table headers. and also determined which data from the `rows` prop is shown in the table.
+The "columns" props is an array of objects that determines the details of the table headers and also determines which data from the `rows` prop is shown in the table. 
+
+The  `Icolumn` interface contains two important properties which are 
+
+The interface defining the table is below.
 
 
+
+```ts
+
+interface Icolumn {
+	field: string, //This field can have a full stop(.) will allow us to read further into nested objects
+	use: string, //This will be used to display in the table heading
+
+	//Indicates that of this column should be used to search
+	use_in_search?: boolean,
+
+	//Indicates If this should be used displayed in the table header
+	use_in_display?: boolean,
+
+};
+
+type Icolumns = Icolumn[]
+
+/**
+ * The Example rows above can have its column data looking thus.
+ */
+
+
+
+```
 ## License
 
 MIT © [mklef121](https://github.com/mklef121)
