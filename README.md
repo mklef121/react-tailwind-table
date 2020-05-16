@@ -32,7 +32,7 @@ A few features that comes with this table include
   	- [Hide Search](#hide-search)
   - [Using In Your Component](#using-in-your-component)
 - [Looks and Feel](#looks-and-feel)
-- License
+- [License](#license)
 
 ## Install
 
@@ -201,17 +201,17 @@ class App extends React.Component {
     super(props)
   }
 
-rowcheck:Irender_row = (row,column, display_text) => {
+rowcheck:Irender_row = (row,column, display_value) => {
 
     if (column.field === "club_id") {
       return <button className="border p-2">View Club Details</button>
     }
 
     if (column.field === "name") {
-      return <b>{display_text}</b>
+      return <b>{display_value}</b>
     }
 
-    return display_text
+    return display_value
   }
 
   render() {
@@ -238,13 +238,12 @@ To make the component fast and keep it smooth (Since a search goes through all r
 
 
 ### No Content Message
-table_header
 
 When there is no data to display (rows props is empty), the `No Data Availaible` text is shown. The `no_content_text` props controls the text.
 
 ### Hide Search
 
-By default, the search input form is vissible, to hide it, pass a `false` to the  `show_search` prop.
+By default, the search input form is visible, to hide it, pass a `false` to the  `show_search` prop.
 
 
 ## Using In Your Component
@@ -270,17 +269,17 @@ class App extends React.Component {
   }
 
 
-  rowcheck = (row,column, display_text) => {
+  rowcheck = (row,column, display_value) => {
 
     if (column.field === "created_at") {
       return <button className="border p-2">See button</button>
     }
 
     if (column.field === "name") {
-      return <b>{display_text}</b>
+      return <b>{display_value}</b>
     }
 
-    return display_text
+    return display_value
   }
 
   render() {
@@ -377,7 +376,7 @@ function fakePlayers(){
 ```
 
 
-##Looks and Feel
+## Looks and Feel
 
 ![react-tailwind-table](resources/react-table.jpg)
 
