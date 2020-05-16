@@ -18,12 +18,12 @@ npm install --save react-tailwind-table
 ```tsx
 import React, { Component } from 'react'
 
-import MyComponent from 'react-tailwind-table'
+import Table from 'react-tailwind-table'
 import 'react-tailwind-table/dist/index.css'
 
 class Example extends Component {
   render() {
-    return <MyComponent />
+    return <Table columns={[]} rows={[]} />
   }
 }
 ```
