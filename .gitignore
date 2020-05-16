@@ -4,6 +4,9 @@
 # dependencies
 node_modules
 
+# test coverage
+coverage
+
 # builds
 build
 dist
