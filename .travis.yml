@@ -2,13 +2,28 @@ language: node_js
 node_js:
   - 12
   - 10
-  
+
 before_install:
   - npm install codecov.io coveralls
 
 after_success:
   - cat ./coverage/lcov.info | ./node_modules/codecov.io/bin/codecov.io.js
   - cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js
+
+jobs:
+  include:
+    # Define the release stage that runs semantic-release
+    # to understand better read https://docs.travis-ci.com/user/build-stages/
+    - stage: release
+      node_js: lts/*
+      # Advanced: optionally overwrite your default `script` step to skip the tests
+      # script: skip
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script:
+          - npm run build
+          - npx semantic-release
 
 branches:
   only:
