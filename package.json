@@ -54,8 +54,8 @@
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
-    "tailwindcss": "^1.4.6",
-    "semantic-release": "^17.0.7"
+    "semantic-release": "^17.0.7",
+    "tailwindcss": "^1.4.6"
   },
   "files": [
     "dist"
