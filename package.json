@@ -15,7 +15,7 @@
     "build": "microbundle-crl --css-modules  false --no-compress --format modern,cjs",
     "start": "microbundle-crl watch  --css-modules  false --no-compress --format modern,cjs",
     "prepublish": "run-s build",
-    "test": "run-s test:unit",
+    "test": "run-s test:unit test:build",
     "test:build": "run-s build",
     "test:lint": "eslint . --fix",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom --coverage=true",
