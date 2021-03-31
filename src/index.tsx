@@ -9,7 +9,10 @@ import PropTypes from 'prop-types';
 import {Icolumn, Irow, renderFunction, Iprop, ItableLinks, 
         ItableState, IpaginateProps, IpageActiveSet} from "./types"
 
+import ReactTable from "./new/table";
 
+
+export const TailTable =  ReactTable;
 
 /*
 Sample above is  shouldComponentUpdate

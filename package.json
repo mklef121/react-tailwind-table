@@ -12,7 +12,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "microbundle-crl --css-modules  false --no-compress --format modern,cjs",
+    "build": "NODE_ENV=production microbundle-crl --css-modules  false --no-compress --format modern,cjs",
     "start": "microbundle-crl watch  --css-modules  false --no-compress --format modern,cjs",
     "prepublish": "run-s build",
     "test": "run-s test:unit test:build",
@@ -29,10 +29,12 @@
     "react": "^16.0.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss7-compat": "^2.0.4",
     "@types/jest": "^25.1.4",
     "@types/react": "^16.9.27",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
+    "autoprefixer": "^9.8.6",
     "babel-eslint": "^10.0.3",
     "cross-env": "^7.0.2",
     "eslint": "^6.8.0",
@@ -47,7 +49,9 @@
     "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.2.0",
     "microbundle-crl": "^0.13.10",
+    "nan": "^2.14.1",
     "npm-run-all": "^4.1.5",
+    "postcss": "^7.0.35",
     "postcss-cli": "^7.1.1",
     "prettier": "^2.0.4",
     "prop-types": "^15.7.2",
@@ -55,9 +59,10 @@
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
     "semantic-release": "^17.0.7",
-    "tailwindcss": "^1.4.6"
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.4"
   },
   "files": [
     "dist"
-  ]
+  ],
+  "dependencies": {}
 }

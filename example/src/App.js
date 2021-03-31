@@ -1,7 +1,8 @@
 import React from 'react'
 
-import Table from 'react-tailwind-table'
+import Table, {TailTable} from 'react-tailwind-table'
 import 'react-tailwind-table/dist/index.css'
+import {row,col} from "./table-data";
 
 
 class App extends React.Component {
@@ -9,28 +10,28 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state={
-      columns:column(),
-      rows: fakePlayers()
-    }
+    // this.state={
+    //   columns:column(),
+    //   rows: fakePlayers()
+    // }
   }
 
   componentDidMount(){
 
-    setTimeout(() => {
-        // callback()
-       this.setState({
-         columns:[...this.state.columns, ...second_column()]
-       })
-      }, 12000);
+    // setTimeout(() => {
+    //     // callback()
+    //    this.setState({
+    //      columns:[...this.state.columns, ...second_column()]
+    //    })
+    //   }, 12000);
 
 
-    setTimeout(() => {
-        // callback()
-       this.setState({
-         rows:[...second_row(),...this.state.rows]
-       })
-      }, 15000);
+    // setTimeout(() => {
+    //     // callback()
+    //    this.setState({
+    //      rows:[...second_row(),...this.state.rows]
+    //    })
+    //   }, 15000);
   }
 
   rowcheck = (row,column, display_text) => {
@@ -47,7 +48,12 @@ class App extends React.Component {
   }
 
   render() {
-    return <Table columns={this.state.columns} rows={this.state.rows} per_page={3} table_header="Test Table" show_search = {true} row_render ={this.rowcheck}/>
+    return(
+      <div style={{padding:"20px"}}>
+        <TailTable columns={col} rows={row} per_page={15} table_header="My Table Is Good" ></TailTable>
+      </div>
+    ) 
+    // return <Table columns={this.state.columns} rows={this.state.rows} per_page={3} table_header="Test Table" show_search = {true} row_render ={this.rowcheck}/>
   }
 }
 
