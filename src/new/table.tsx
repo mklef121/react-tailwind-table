@@ -193,6 +193,8 @@ export default class ReactTable extends React.Component<Iprop, Istate> {
 
 
 	render() {
+		// console.log(this.props.bordered,"striped");
+		
 		const styling = this.props.styling as ItableStyle;
 		const display_columns = this.props.columns.filter((column: Icolumn) => {
 			//Dont show columns the developer indicated should be false
@@ -247,7 +249,9 @@ export default class ReactTable extends React.Component<Iprop, Istate> {
 									render={this.props.row_render} index={index}
 									active_page_number={this.state.active_page_number}
 									checked_set={this.state.paginated_map[this.state.active_page_number].checked_set}
-									setCheck={this.checkBoxCheck} />
+									setCheck={this.checkBoxCheck}
+									is_striped ={this.props.striped as boolean}
+									is_bordered ={this.props.bordered as boolean} />
 							)) ||
 
 						<tr className="hover:bg-table-col bg-table-col border-b border-gray-200 ">
@@ -324,6 +328,8 @@ ReactTable.propTypes = {
 	table_header: PropTypes.string,
 	export_text: PropTypes.string,
 	bulk_select_options: PropTypes.arrayOf(PropTypes.string),
+	striped: PropTypes.bool,
+	bordered: PropTypes.bool,
 	styling: PropTypes.shape({
 		base_bg_color: PropTypes.string,
 		base_text_color: PropTypes.string
@@ -340,6 +346,8 @@ ReactTable.defaultProps = {
 	bulk_select_options: [],
 	export_text: 'Export',
 	export_csv_file: "file_name",
+	striped: true,
+	bordered: true,
 	styling:{
 		base_bg_color:"bg-pink-700",
 		base_text_color:"text-pink-700"

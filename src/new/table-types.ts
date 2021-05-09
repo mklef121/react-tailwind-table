@@ -40,6 +40,8 @@ export interface Iprop {
 	export_text?: string,
 	bulk_select_options?: string[],
 	export_csv_file ?: string,
+	striped ?: boolean,
+	bordered ?: boolean,
 
 	row_render?: renderFunction,
 	on_search?: (search_word: string, result?: Irow[] | []) => void,

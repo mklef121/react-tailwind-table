@@ -58,6 +58,8 @@ class App extends React.Component {
         // should_export={true}
         on_search = {onSearch}
         // export_modify={exportModify}
+        striped={true}
+        bordered={false}
         ></TailTable>
       </div>
     ) 

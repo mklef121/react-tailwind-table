@@ -25,14 +25,16 @@ export interface ItableRow {
 	 * I therefore trigger an event up the tree to notify about this click. This is then recorded on the 
 	 * `Set` that holds data of clicked rows for this page. 
 	 */
-	setCheck: (page_number: number, index: number, ischecked: boolean) => void
+	setCheck: (page_number: number, index: number, ischecked: boolean) => void,
+	is_striped: boolean
+	is_bordered:boolean
 }
 
 export function TableRow(props: ItableRow) {
 
 	return (
-		<tr className={`hover:bg-gray-50 border-b border-gray-200 
-						${utilsClass.isEven(props.index + 1) ? 'bg-gray-50' : ''}`}>
+		<tr className={`hover:bg-gray-50 ${props.is_bordered ? "border-b border-gray-200":""} 
+						${utilsClass.isEven(props.index + 1) && props.is_striped? 'bg-gray-50' : ''}`}>
 
 			{props.use_bulk_action &&
 				<td className="px-2 py-4 pl-4 text-base ">
@@ -194,9 +196,6 @@ export function TableTop(props: { children?: React.ReactNode }) {
 	</Fragment>
 
 }
-
-
-
 
 
 export function TableBulkAction(props: { action_options: string[], eventSelected: (option: string) => void, bg_color : string, text_color ?: string}) {
