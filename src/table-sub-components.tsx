@@ -144,8 +144,8 @@ export function TableHead(props: Ithead) {
 
 export function TableCaption(props: { text: string }) {
 
-	return <div className="flex mt-4 px-4 mb-1">
-		<h4 className="text-base font-semibold tracking-wide leading-7 ml-1 text-gray-700 react-table-top">
+	return <div className="flex mt-4 px-4 mb-1 text-base font-semibold tracking-wide leading-7 text-gray-700">
+		<h4 className=" ml-1 react-table-top">
 			{props.text}
 		</h4>
 	</div>
@@ -226,7 +226,7 @@ export function TableBulkAction(props: { action_options: string[], eventSelected
 				value={currentOption}
 				className="leading-tight block appearance-none w-full bg-white flex-shrink 
 								   border border-gray-200 px-3 py-2 pr-8 rounded ">
-				<option value="nothing">Pick ...</option>
+				<option value="nothing">Pick...</option>
 				{
 					props.action_options.map((value: string, index: number) => {
 						return <option key={index.toString()} value={value}>{value}</option>

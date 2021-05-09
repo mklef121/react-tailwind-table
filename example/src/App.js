@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Table, {TailTable} from 'react-tailwind-table'
+import Table from 'react-tailwind-table'
 import 'react-tailwind-table/dist/index.css'
 import {row,col} from "./table-data";
 
@@ -50,8 +50,8 @@ class App extends React.Component {
   render() {
     return(
       <div style={{padding:"20px"}}>
-        <TailTable columns={col} rows={row} 
-        per_page={4} table_header="My Table Is Good" 
+        <Table columns={col} rows={row} 
+        per_page={7} table_header="My Table Is Good" 
         bulk_select_options={["hello","hi","cool"]} 
         // export_csv_file = "FuckThisShit"
         on_bulk_action={tableBulkClick} 
@@ -59,8 +59,8 @@ class App extends React.Component {
         on_search = {onSearch}
         // export_modify={exportModify}
         striped={true}
-        bordered={false}
-        ></TailTable>
+        bordered={true}
+        ></Table>
       </div>
     ) 
     // return <Table columns={this.state.columns} rows={this.state.rows} per_page={3} table_header="Test Table" show_search = {true} row_render ={this.rowcheck}/>

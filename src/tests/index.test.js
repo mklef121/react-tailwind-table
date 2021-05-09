@@ -4,19 +4,19 @@ import Table from '../index'
 import { act } from 'react-dom/test-utils'
 
 describe('Table Component', () => {
-  let container = null
+  let containHolder = null
 
   beforeEach(() => {
     // setup a DOM element as a render target
-    container = document.createElement('div')
-    document.body.appendChild(container)
+    containHolder = document.createElement('div')
+    document.body.appendChild(containHolder)
   })
 
   afterEach(() => {
     // cleanup on exiting
-    unmountComponentAtNode(container)
-    container.remove()
-    container = null
+    unmountComponentAtNode(containHolder)
+    containHolder.remove()
+    containHolder = null
   })
 
   it('Header Title Shows', () => {
@@ -28,11 +28,11 @@ describe('Table Component', () => {
           table_header='Test Table'
           per_page={2}
         />,
-        container
+        containHolder
       )
     })
 
-    expect(container.querySelector('#table-header').textContent).toBe(
+    expect(containHolder.querySelector('#table-header').textContent).toBe(
       'Test Table'
     )
   })
@@ -47,11 +47,11 @@ describe('Table Component', () => {
           table_header='Test Table'
           per_page={page_num}
         />,
-        container
+        containHolder
       )
     })
 
-    expect(container.querySelectorAll('tbody tr').length).toBe(page_num)
+    expect(containHolder.querySelectorAll('tbody tr').length).toBe(page_num)
   })
 
   it('NEXT page button Clicks', () => {
@@ -64,16 +64,16 @@ describe('Table Component', () => {
           table_header='Test Table'
           per_page={page_num}
         />,
-        container
+        containHolder
       )
     })
 
-    expect(container.innerHTML).toContain('Sadio Mane')
+    expect(containHolder.innerHTML).toContain('Sadio Mane')
 
-    var next_button = container.querySelector('.next-button')
+    var next_button = containHolder.querySelector('.next-button')
 
     // .not.toContain toNotContain
-    expect(container.innerHTML).not.toContain('Robertor Fermino')
+    expect(containHolder.innerHTML).not.toContain('Robertor Fermino')
     var clickEvent = document.createEvent('CustomEvent')
     clickEvent.initCustomEvent('click', true, true, null)
 
@@ -81,7 +81,7 @@ describe('Table Component', () => {
       next_button.dispatchEvent(clickEvent)
     })
 
-    expect(container.innerHTML).toContain('Robertor Fermino')
+    expect(containHolder.innerHTML).toContain('Robertor Fermino')
   })
 })
 

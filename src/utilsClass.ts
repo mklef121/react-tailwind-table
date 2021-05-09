@@ -4,52 +4,7 @@ import { Irow, Icolumn, IPaginated, ItableLinks, IretainPage, stringRenderFunc }
  * data and get stuff done
  */
 export default class utilsClass {
-
-    static isObjectLike(obj: any) {
-        if (!obj) return false;
-        return (typeof obj === "object" && obj !== null);
-    }
-
-    static inArray(arr: Array<any>, elem: unknown) {
-        if (arr == null || !utilsClass.isArrayLike(arr))
-            throw Error("{arr} is not an Array");
-        if (arr.indexOf(elem) === -1)
-            return false;
-        return true;
-    }
-
-    /**
-     * The splice() method changes the contents of an array by removing or replacing 
-     * existing elements and/or adding new elements using an in-place algorithm.
-     * @param arr  Original array to apply splice on.
-     * @param start  Number indicating where to start replacing or deleting from.
-     * @param deleteCount  A number to use and delete items not needed in the original array.
-     * @param items  new item to add at spot item was deleted or replace spot
-     * 
-     */
-    static SpliceArray(arr: any[], start: number, deleteCount: number, ...items: any[]) {
-        return [...arr.slice(0, start), ...items, ...arr.slice(start + deleteCount)];
-    }
-
-    static isArrayLike(data: any) {
-        if (!data) return false;
-
-        return (data.constructor === Array || data instanceof Array);
-    }
-
-    static findArrMemberRemove(arr: any[], item: any) {
-        const index = arr.indexOf(item);
-        if (index === -1) return arr;
-        
-        return utilsClass.SpliceArray(arr, index, 1);
-    }
-
-
-    static nullClass() {
-        return class nullClass { };
-    }
-
-
+    
     static regex_special = [
         "ˆ", "$", "*", "+", "?",
         "[", "]", "(", ")", "{",
@@ -132,19 +87,6 @@ export default class utilsClass {
         }
         return false;
     }
-
-    /**
-     * Uses a parent as reference to a child in order return a single url
-     */
-    static normalizeLink(parent: string, child: string): string {
-        // ltrimStroke
-        parent = utilsClass.rtrim(parent, "/", "");
-        child = utilsClass.ltrim(child, "/", "");
-
-        return parent + "/" + child;
-    }
-
-
 
     /**
      * A Function to determine if two objects are arrays are equal
@@ -233,79 +175,6 @@ export default class utilsClass {
 
         return true;
     }
-
-    static titleCase(str: string): string {
-        if (!utilsClass.isStringLike(str)) {
-            throw Error("titleCase can only work on strings");
-
-        }
-
-        return str.toLowerCase()
-            .split(' ')
-            .map(function(word) {
-                return (word.charAt(0)
-                    .toUpperCase() + word.slice(1));
-            }).join(' ');
-    }
-
-    /**
-     * Since we would be needing unique strings that have date stamp for more uniqueness,
-     * this function does just that. If the string needed is not more that the epoch date time string length
-     * we eturn just random strings, else we concatenate with the date
-     */
-    static randomStringsNumbers(length: number = 22) {
-
-        let date_string: String = String(Date.now()),
-            is_length_diff: boolean = length <= date_string.length,
-            str_lenth: number = is_length_diff ? length : length - date_string.length,
-            should_padd_date: boolean = is_length_diff ? false : true,
-            text: string;
-
-
-
-        text = utilsClass.randomStringsOnly(str_lenth);
-
-        return should_padd_date ? text + date_string : text;
-    }
-
-    static randomStringsOnly(length: number = 12) {
-        var text = "";
-        var possible = "stuvwxyzRSTUABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzRSTUVWXYZabcdefghijk";
-        for (var i = 0; i < length; i++)
-            text += possible.charAt(Math.floor(Math.random() * possible.length));
-
-        return text;
-    }
-
-
-    static isArrayEmpty(array: any) {
-        if (!array || array === void (0) || array.length === 0) {
-            return true;
-        }
-        return false;
-    }
-
-    static isEmptyObject(obj: object): boolean {
-        if (!obj) return true;
-        /* eslint-disable no-unused-vars */
-        // See https://github.com/eslint/eslint/issues/6125
-        var name;
-        for (name in obj) {
-            return false;
-        }
-        return true;
-    }
-
-    // * @this {!Long}
-
-
-    /**
-     * Tests if this given value is odd.
-     * @returns {boolean}
-     */
-    static isOdd(value: number) {
-        return (value & 1) === 1;
-    };
 
     /**
      * Tests if this given value is even.

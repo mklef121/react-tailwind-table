@@ -57,7 +57,34 @@ export interface Iprop {
 
 export interface ItableStyle {
 	base_bg_color ?: string,
-	base_text_color ?: string
+	base_text_color ?: string,
+	top ?:{
+		main ?: string,
+		title ?: string,
+		elements ?:{
+			main ?: string,
+			search ?: string,
+			bulk_select ?: {
+				main ?:string,
+				button ?: string
+			},
+			export ?:string
+
+		}
+
+	},
+	table_head:{
+		table_row ?: string,
+		table_data ?: string
+	},
+	table_body:{
+		main ?: string,
+		table_row ?: string,
+		table_data ?: string
+	},
+	footer?: {
+		main?: string
+	}
 }
 
 export interface Istate {
