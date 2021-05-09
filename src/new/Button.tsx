@@ -6,17 +6,17 @@ interface buttonProps extends Record<string, any>{
 	px ?: string;
 	py ?: string;
 	children?:string;
-
-
+	bg_color: string
 }
 
 export default function Button(props: buttonProps) {
-	var myclass = `${props.uppercase ? 'uppercase':'' } ${props.px ? props.px:'px-5' }
-							${props.py ? props.py:'py-2' } 
-							appearance-none bg-brand-color text-white rounded`;
+	const {uppercase,className, text, px, py, children,bg_color, ...others} = props;
+	var myclass = `${uppercase ? 'uppercase ':' ' } ${px ? px:'px-5'} ${px ? px:'px-5'} ${py ? py:'py-2'}
+				   ${bg_color} 
+				    appearance-none text-white rounded`;
 	if (props.className) myclass = myclass+ " "+props.className;
 
-	const {uppercase,className, text, px, py, children, ...others} = props;
+	
 	
 	return (
 		<button className={myclass} {...others}>

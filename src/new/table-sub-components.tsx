@@ -11,19 +11,28 @@ import utilsClass from "./utilsClass";
 export interface ItableRow {
 	row: Irow,
 	columns: Icolumn[],
+	/**
+	 * If users want to enable using bulk selects, then they have to pass in an array of strings of actions.
+	 * If that array of string is empty, then this will be false
+	 */
 	use_bulk_action: boolean,
 	index: number,
 	render?: renderFunction,
 	checked_set: Set<number>,
 	active_page_number: number,
+	/**
+	 * Whenever a single checkbox in a table row is clicked, this is invoked. Since I'm using a cotrolled input,
+	 * I therefore trigger an event up the tree to notify about this click. This is then recorded on the 
+	 * `Set` that holds data of clicked rows for this page. 
+	 */
 	setCheck: (page_number: number, index: number, ischecked: boolean) => void
 }
 
 export function TableRow(props: ItableRow) {
 
 	return (
-		<tr className={`hover:bg-table-col border-b border-gray-200 
-						${utilsClass.isEven(props.index + 1) ? 'bg-table-col' : ''}`}>
+		<tr className={`hover:bg-gray-50 border-b border-gray-200 
+						${utilsClass.isEven(props.index + 1) ? 'bg-gray-50' : ''}`}>
 
 			{props.use_bulk_action &&
 				<td className="px-2 py-4 pl-4 text-base ">
@@ -60,24 +69,29 @@ export function TableData(props: { col: Icolumn, row: Irow, render?: renderFunct
 interface Ithead {
 	columns: Icolumn[],
 	use_bulk_action: boolean,
-	pageData: IPerPage,
+	page_data: IPerPage,
 	active_page_number: number,
-	massChecking: (page_number: number, action: "check-all" | "uncheck-all") => void
+	mass_checking: (page_number: number, action: "check-all" | "uncheck-all") => void
 }
 
 export function TableHead(props: Ithead) {
 
-	//This data might be undefined, so use this operator
-	let rows_lenth = props.pageData?.page_row_array.length;
-	let checked_length = props.pageData?.checked_set.size;
-
 	let page = props.active_page_number;
+	let rows_lenth : number = 0;
+	let checked_length : number = 0;
+	let all_is_checked : boolean = false;
+	let some_ischecked : boolean = false;
+	let none_is_checked : boolean = false;
 
-	let all_is_checked = rows_lenth === checked_length && rows_lenth !== 0;
-
-	let some_ischecked = checked_length > 0 && !all_is_checked;
-
-	let none_is_checked = checked_length === 0;
+	//Only run this calculations if user opted to use bulk select api and the table data is not empty
+	if(props.use_bulk_action){
+		//This data might be undefined, so use this operator
+		rows_lenth = props.page_data?.page_row_array.length;
+		checked_length = props.page_data?.checked_set.size;
+		all_is_checked = rows_lenth === checked_length && rows_lenth !== 0;
+		some_ischecked = checked_length > 0 && !all_is_checked;
+		none_is_checked = checked_length === 0;
+	}
 
 
 	const display_columns = props.columns.filter((column: Icolumn) => {
@@ -91,17 +105,17 @@ export function TableHead(props: Ithead) {
 			props.use_bulk_action &&
 			<th className="text-base font-semibold text-black py-3.5 px-2 pl-4" style={{ "fontSize": "0.95rem" }}>
 				{
-					all_is_checked && < CheckedBox onClick={() => props.massChecking(page, 'uncheck-all')}
+					all_is_checked && < CheckedBox onClick={() => props.mass_checking(page, 'uncheck-all')}
 						className="fill-current text-gray-700 w-4 h-4 cursor-pointer" />
 				}
 
 				{
-					some_ischecked && < IndeterminateCheckBox onClick={() => props.massChecking(page, 'check-all')}
+					some_ischecked && < IndeterminateCheckBox onClick={() => props.mass_checking(page, 'check-all')}
 						className="fill-current text-gray-700 w-5 h-5 cursor-pointer" />
 				}
 
 				{
-					none_is_checked && < UnCheckedBox onClick={() => props.massChecking(page, 'check-all')}
+					none_is_checked && < UnCheckedBox onClick={() => props.mass_checking(page, 'check-all')}
 						className="fill-current text-gray-700 w-5 h-5 cursor-pointer" />
 				}
 			</th>
@@ -138,7 +152,6 @@ export function TableCaption(props: { text: string }) {
 
 
 export function TableSearch(props: { onSearch: (text: string) => void }) {
-	// leading-snug border border-gray-300 block w-full appearance-none bg-gray-100 text-sm text-gray-600 py-1 px-4 pl-8 rounded-lg
 
 	return <div className="relative flex items-center mt-3 md:mt-0">
 		<input type="text" name="search"
@@ -151,10 +164,19 @@ export function TableSearch(props: { onSearch: (text: string) => void }) {
 
 }
 
-export function TableExport(props: { export_text: string, paginated_data: IPaginated, cols: Icolumn[], processFunc?: stringRenderFunc }) {
+interface IexportProps {
+	export_text: string, 
+	paginated_data: IPaginated, 
+	cols: Icolumn[], 
+	file_name: string, 
+	processFunc?: stringRenderFunc, 
+	bg_color: string, 
+	text_color?: string
+}
+export function TableExport(props: IexportProps) {
 
-	return <div className="flex items-center text-brand-color cursor-pointer order-first md:order-none self-end md:self-auto"
-		onClick={() => processDownload(props.paginated_data, props.cols, props.processFunc)} >
+	return <div className="flex items-center text-brand-color  cursor-pointer order-first md:order-none self-end md:self-auto"
+		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)} >
 		<Import className="fill-current w-3 h-3 mr-2 " />
 		<p className="font-normal text-base">{props.export_text}</p>
 	</div>
@@ -177,19 +199,24 @@ export function TableTop(props: { children?: React.ReactNode }) {
 
 
 
-export function TableBulkAction(props: { action_options: string[], eventSelected: (option: string) => void }) {
+export function TableBulkAction(props: { action_options: string[], eventSelected: (option: string) => void, bg_color : string, text_color ?: string}) {
 
 	const [currentOption, setOption] = useState('nothing');
+	let isNothing = currentOption === 'nothing';
 
 	function optionChange(event: React.ChangeEvent<HTMLSelectElement>) {
 		let value = event.target.value;
 		setOption(value)
 	}
 
-	function takeAction() {
-		if (currentOption !== 'nothing') {
+	/**
+	 * When the `Button` element below is pressed, this function fires the event to the prop passed in by the user.
+	 */
+	function takeAction(){
+		if (!isNothing) {
+			//The rows selected are not passed in here, the parent table component is allowed to figure out
+			//The logic of getting the currently selected rows and sending to the user
 			props.eventSelected(currentOption);
-
 		}
 	}
 
@@ -214,7 +241,7 @@ export function TableBulkAction(props: { action_options: string[], eventSelected
 			</div>
 		</div>
 
-		<Button px="px-4" className="leading-4" onClick={takeAction} >Apply</Button>
+		<Button bg_color={props.bg_color} px="px-4" className={`${isNothing?'opacity-50':''} leading-4`} disabled={isNothing} onClick={takeAction} >Apply</Button>
 	</div>
 }
 
@@ -250,7 +277,7 @@ export function Footer(props: Ifooter) {
 	}
 
 	return page_count > 0 ?
-		<div className="flex flex-col md:flex-row justify-between mt-6 items-center px-4">
+		<div className="flex flex-col md:flex-row justify-between mt-6 items-center px-2 w-full md:w-auto">
 			<div>
 				<p className="text-sm">
 					Showing
@@ -260,7 +287,7 @@ export function Footer(props: Ifooter) {
 			</p>
 			</div>
 
-			<div className="flex rounded overflow-hidden border mt-2 md:mt-0">
+			<div className="flex rounded overflow-hidden border mt-2 md:mt-0 w-full md:w-auto">
 
 				<div className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
 							${paginated_map[active_page].back_button_clickable ?
@@ -276,11 +303,16 @@ export function Footer(props: Ifooter) {
 				</div>
 
 				{
-					/* I want each line to have between 7-9 boxes of pagination, This logic solved it*/
+					/**
+					 * I want each line to have between 7-9 boxes of pagination, This logic solved it
+					 * This implementation also had mobile view in mind. To make sure the pagination numbers do not 
+					 * over stretch the mobile screen
+					 */
 
 					/* Else */
 					page_number_list.length <= 7 ?
-
+						//If total number of items in list is just less than or equal to seven
+						//Then don't border implementing the algorithm below
 						page_number_list.map((page_number) => {
 							let is_active_page = page_number === active_page;
 							return <NumberBox key={page_number} is_active_page={is_active_page}
@@ -289,16 +321,16 @@ export function Footer(props: Ifooter) {
 
 						/* Else IF */
 						: active_page >= 1 && active_page <= 6 ?
-
+							/* if the active page is nin the beginning of the pagination list*/
 							<ActivePageBegining pageClick={pageClick} page_number_list={page_number_list}
 								active_page={active_page} />
 
-							/* Else IF */
+							/* Else IF  The current active page is at the ending of the Pagination list*/
 							: active_page >= page_count - 5 && active_page <= page_count ?
 								<ActivePageEnding pageClick={pageClick} page_number_list={page_number_list}
 									active_page={active_page} />
 
-								/* Else */
+								/* Else  the active page is in the middle of the pagination list*/
 								: <ActivePageMiddle pageClick={pageClick} page_number_list={page_number_list}
 									active_page={active_page} />
 				}
@@ -406,7 +438,7 @@ function ActivePageEnding(props: { page_number_list: number[]; active_page: numb
 
 function DottedBox() {
 
-	return <div className="w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r ">
+	return <div className="w-7 h-7 md:w-8 md:h-8 flex flex-grow items-center justify-around border-r ">
 		<p className="text-sm text-gray-700 ">
 			<span className="hidden md:flex"> . . . </span>
 			<span className="flex md:hidden"> ... </span>
@@ -416,7 +448,7 @@ function DottedBox() {
 
 
 function NumberBox(props: { page_number: number, is_active_page: boolean, pageClick: (page: number) => void }) {
-	return <div className={`w-7 h-7 md:w-8 md:h-8 flex items-center flex-shrink md:flex-shrink-0 justify-around border-r cursor-pointer
+	return <div className={`w-7 h-7 md:w-8 md:h-8 flex items-center flex-grow flex-shrink md:flex-shrink-0 justify-around border-r cursor-pointer
 									${props.is_active_page ? 'bg-brand-color' : ''}`}
 		onClick={() => props.pageClick(props.page_number)}>
 		<p className={`${props.is_active_page ? 'text-white' : ''} text-sm`}>
@@ -429,17 +461,17 @@ function NumberBox(props: { page_number: number, is_active_page: boolean, pageCl
 }
 
 
-function processDownload(paginated_data: IPaginated, colums: Icolumn[], processFunc?: stringRenderFunc) {
+async function processDownload(paginated_data: IPaginated, colums: Icolumn[],file_name: string, processFunc?: stringRenderFunc) {
 
 	let all_rows: Irow[] | null = [];
 	var page: string; //suppose to be :number
-	var file_name = "my_data.csv";
+	 file_name = file_name +".csv";
 	for (page in paginated_data) {
 		all_rows = all_rows.concat(paginated_data[page].page_row_array)
 	}
 
 
-	let blob = utilsClass.generateCSV(colums, all_rows, processFunc),
+	let blob = await utilsClass.generateCSV(colums, all_rows, processFunc), 
 		url = window.URL.createObjectURL(blob);
 
 	// @ts-ignore

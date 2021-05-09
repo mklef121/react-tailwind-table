@@ -50,11 +50,34 @@ class App extends React.Component {
   render() {
     return(
       <div style={{padding:"20px"}}>
-        <TailTable columns={col} rows={row} per_page={15} table_header="My Table Is Good" ></TailTable>
+        <TailTable columns={col} rows={row} 
+        per_page={4} table_header="My Table Is Good" 
+        bulk_select_options={["hello","hi","cool"]} 
+        // export_csv_file = "FuckThisShit"
+        on_bulk_action={tableBulkClick} 
+        // should_export={true}
+        on_search = {onSearch}
+        // export_modify={exportModify}
+        ></TailTable>
       </div>
     ) 
     // return <Table columns={this.state.columns} rows={this.state.rows} per_page={3} table_header="Test Table" show_search = {true} row_render ={this.rowcheck}/>
   }
+}
+
+function tableBulkClick(option,value){
+  console.log(option,value)
+}
+
+
+function onSearch(text,values){
+  console.log(text,values)
+}
+
+function exportModify(a,b,c){
+  // console.log(a,b,c)
+
+  return "Fool"
 }
 
 

@@ -3,7 +3,7 @@ export const col = [
    field: "front_end_position.name.full_name",
    use: "Position",
    //Will not be used in search filtering
-   use_in_search:false
+  //  use_in_search:false
  },
  {
    field: "name",

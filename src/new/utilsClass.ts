@@ -40,7 +40,7 @@ export default class utilsClass {
     static findArrMemberRemove(arr: any[], item: any) {
         const index = arr.indexOf(item);
         if (index === -1) return arr;
-        console.log(index, "found");
+        
         return utilsClass.SpliceArray(arr, index, 1);
     }
 
@@ -422,43 +422,51 @@ export default class utilsClass {
 
         final_csv = columns_array.join(",")+ '\n';
 
-
-        items.forEach(function(row: Irow) {
-            let rowArray: Array<string> = [];
-
-            columns.forEach(function(column: Icolumn) {
-                if(column.use_in_export === false) return;
-                var display_value = utilsClass.unwindObject(row, column.field);
-                if(exportModify) display_value = exportModify(row, column,display_value)
-
-                //to escape a comma in excel, I use this string. it was realized by i and dotun 
-                //on smart eye.
-                rowArray.push('"'+display_value+'"');
-
+        return new Promise<Blob>(function(resolve){
+            //Wrap this operation in a promise since it might be CPU intensive
+            items.forEach(function(row: Irow) {
+                let rowArray: Array<string> = [];
+    
+                columns.forEach(function(column: Icolumn) {
+                    if(column.use_in_export === false) return;
+                    var display_value = utilsClass.unwindObject(row, column.field);
+                    if(exportModify) display_value = exportModify(row, column,display_value)
+    
+                    //to escape a comma in excel, I use this string. it was realized by i and dotun 
+                    //on smart eye.
+                    rowArray.push('"'+display_value+'"');
+    
+                });
+    
+                if (rowArray.length >0) final_csv = final_csv + rowArray.join(",")+ '\n';
             });
-
-            if (rowArray.length >0) final_csv = final_csv + rowArray.join(",")+ '\n';
+    
+            var blob = new Blob([final_csv], {type: "octet/stream"});
+            
+            resolve(blob);
         });
-
-        var blob = new Blob([final_csv], {type: "octet/stream"});
-
-        return blob;
+        
     }
 
 
     /**
-     
-        * Recursively stringifies the values of an object, space separated, in an
-         * SSR safe deterministic way (keys are storted before stringification)
-        
-         *   ex:
-         *     { b: 3, c: { z: 'zzz', d: null, e: 2 }, d: [10, 12, 11], a: 'one' }
-         *   becomes
-         *     'one 3 2 zzz 10 12 11'
-        
-         * Primatives (numbers/strings) are returned as-is
-         * Null and undefined values are filtered out
-         * Dates are converted to their native string format
+      * Recursively stringifies the values of an object, space separated, in an
+      * SSR safe deterministic way (keys are storted before stringification)
+      *
+      *   ex:
+      *    ```json 
+      *     { b: 3, 
+      *       c: { z: 'zzz', d: null, e: 2 }, 
+      *       d: [10, 12, 11], 
+      *       a: 'one' 
+      *     }
+      *    ```
+      *   becomes
+      *     'one 3 2 zzz 10 12 11'
+      *
+      * Primatives (numbers/strings) are returned as-is
+      * Null and undefined values are filtered out
+      * Dates are converted to their native string format
       */
     static stringifyObjectValues(val: Record<string, any> | any): string {
         if (typeof val === 'undefined' || val === null) {
