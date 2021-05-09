@@ -223,7 +223,8 @@ export default class ReactTable extends React.Component<Iprop, Istate> {
 							     								 paginated_data={this.state.paginated_map}
 							     								 cols={this.props.columns}
 																 file_name={this.props.export_csv_file as string}
-							     								 processFunc={this.props.export_modify}/> 
+							     								 processFunc={this.props.export_modify}
+																 text_color={styling.base_text_color as string}/> 
 					}
 
 				</TableTop>
@@ -264,7 +265,8 @@ export default class ReactTable extends React.Component<Iprop, Istate> {
 				paginated_map={this.state.paginated_map}
 				active_page={this.state.active_page_number}
 				total_pages={this.getTotalPages()}
-				onPageChange={this.onPageChange} />
+				onPageChange={this.onPageChange}
+				bg_color={styling.base_bg_color as string} />
 		</div>
 	}
 

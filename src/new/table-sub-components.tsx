@@ -170,12 +170,12 @@ interface IexportProps {
 	cols: Icolumn[], 
 	file_name: string, 
 	processFunc?: stringRenderFunc, 
-	bg_color: string, 
-	text_color?: string
+	bg_color?: string, 
+	text_color: string
 }
 export function TableExport(props: IexportProps) {
 
-	return <div className="flex items-center text-brand-color  cursor-pointer order-first md:order-none self-end md:self-auto"
+	return <div className={`flex items-center ${props.text_color}  cursor-pointer order-first md:order-none self-end md:self-auto`}
 		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)} >
 		<Import className="fill-current w-3 h-3 mr-2 " />
 		<p className="font-normal text-base">{props.export_text}</p>
@@ -227,7 +227,7 @@ export function TableBulkAction(props: { action_options: string[], eventSelected
 				value={currentOption}
 				className="leading-tight block appearance-none w-full bg-white flex-shrink 
 								   border border-gray-200 px-3 py-2 pr-8 rounded ">
-				<option value="nothing">Choose Bulk Action</option>
+				<option value="nothing">Pick ...</option>
 				{
 					props.action_options.map((value: string, index: number) => {
 						return <option key={index.toString()} value={value}>{value}</option>
@@ -251,7 +251,8 @@ interface Ifooter {
 	paginated_map: IPaginated,
 	active_page: number,
 	total_pages: number,
-	onPageChange: (page_number: number) => void
+	onPageChange: (page_number: number) => void,
+	bg_color: string
 }
 
 export function Footer(props: Ifooter) {
@@ -315,24 +316,27 @@ export function Footer(props: Ifooter) {
 						//Then don't border implementing the algorithm below
 						page_number_list.map((page_number) => {
 							let is_active_page = page_number === active_page;
-							return <NumberBox key={page_number} is_active_page={is_active_page}
-								page_number={page_number} pageClick={pageClick} />
+							return <NumberBox key={page_number} 
+											  is_active_page={is_active_page}
+											  page_number={page_number} 
+											  pageClick={pageClick}
+											  bg_color={props.bg_color} />
 						})
 
 						/* Else IF */
 						: active_page >= 1 && active_page <= 6 ?
 							/* if the active page is nin the beginning of the pagination list*/
 							<ActivePageBegining pageClick={pageClick} page_number_list={page_number_list}
-								active_page={active_page} />
+								active_page={active_page} bg_color={props.bg_color} />
 
 							/* Else IF  The current active page is at the ending of the Pagination list*/
 							: active_page >= page_count - 5 && active_page <= page_count ?
 								<ActivePageEnding pageClick={pageClick} page_number_list={page_number_list}
-									active_page={active_page} />
+									active_page={active_page} bg_color={props.bg_color} />
 
 								/* Else  the active page is in the middle of the pagination list*/
 								: <ActivePageMiddle pageClick={pageClick} page_number_list={page_number_list}
-									active_page={active_page} />
+									active_page={active_page} bg_color={props.bg_color}/>
 				}
 
 
@@ -357,7 +361,7 @@ export function Footer(props: Ifooter) {
 		: null;
 }
 
-function ActivePageBegining(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void }) {
+function ActivePageBegining(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void, bg_color: string }) {
 
 	//Get the page that is last
 	let last_page: number = props.page_number_list[props.page_number_list.length - 1];
@@ -366,19 +370,19 @@ function ActivePageBegining(props: { page_number_list: number[]; active_page: nu
 			props.page_number_list.slice(0, 7).map((page_number) => {
 				let is_active_page = page_number === props.active_page;
 				return <NumberBox key={page_number} is_active_page={is_active_page}
-					page_number={page_number} pageClick={props.pageClick} />
+					page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
 			})
 		}
 
 		<DottedBox />
 
-		<NumberBox page_number={last_page} is_active_page={false} pageClick={props.pageClick} />
+		<NumberBox page_number={last_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color}/>
 
 	</Fragment>
 
 }
 
-function ActivePageMiddle(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void }) {
+function ActivePageMiddle(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void,bg_color: string }) {
 
 	//Get the page that is last
 	let first_page: number = props.page_number_list[0];
@@ -388,7 +392,7 @@ function ActivePageMiddle(props: { page_number_list: number[]; active_page: numb
 	return <Fragment>
 
 		{/*  The First */}
-		<NumberBox page_number={first_page} is_active_page={false} pageClick={props.pageClick} />
+		<NumberBox page_number={first_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color} />
 
 		<DottedBox />
 
@@ -396,14 +400,14 @@ function ActivePageMiddle(props: { page_number_list: number[]; active_page: numb
 			props.page_number_list.slice(props.active_page - 4, props.active_page + 3).map((page_number) => {
 				let is_active_page = page_number === props.active_page;
 				return <NumberBox key={page_number} is_active_page={is_active_page}
-					page_number={page_number} pageClick={props.pageClick} />
+					page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
 			})
 		}
 
 		<DottedBox />
 		{/*  The last */}
 
-		<NumberBox page_number={last_page} is_active_page={false} pageClick={props.pageClick} />
+		<NumberBox page_number={last_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color} />
 
 
 	</Fragment>
@@ -412,21 +416,21 @@ function ActivePageMiddle(props: { page_number_list: number[]; active_page: numb
 
 
 
-function ActivePageEnding(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void }) {
+function ActivePageEnding(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void, bg_color: string}) {
 
 	//Get the page that is last
 	let first_page: number = props.page_number_list[0];
 	let page_count = props.page_number_list.length;
 	return <Fragment>
 
-		<NumberBox page_number={first_page} is_active_page={false} pageClick={props.pageClick} />
+		<NumberBox page_number={first_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color} />
 
 		<DottedBox />
 		{
 			props.page_number_list.slice(page_count - 7, page_count).map((page_number) => {
 				let is_active_page = page_number === props.active_page;
 				return <NumberBox key={page_number} is_active_page={is_active_page}
-					page_number={page_number} pageClick={props.pageClick} />
+					page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
 			})
 		}
 
@@ -447,9 +451,9 @@ function DottedBox() {
 }
 
 
-function NumberBox(props: { page_number: number, is_active_page: boolean, pageClick: (page: number) => void }) {
+function NumberBox(props: { page_number: number, is_active_page: boolean, pageClick: (page: number) => void, bg_color:string }) {
 	return <div className={`w-7 h-7 md:w-8 md:h-8 flex items-center flex-grow flex-shrink md:flex-shrink-0 justify-around border-r cursor-pointer
-									${props.is_active_page ? 'bg-brand-color' : ''}`}
+									${props.is_active_page ? props.bg_color : ''}`}
 		onClick={() => props.pageClick(props.page_number)}>
 		<p className={`${props.is_active_page ? 'text-white' : ''} text-sm`}>
 
