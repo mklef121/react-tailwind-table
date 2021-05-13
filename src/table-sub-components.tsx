@@ -26,18 +26,23 @@ export interface ItableRow {
 	 * `Set` that holds data of clicked rows for this page. 
 	 */
 	setCheck: (page_number: number, index: number, ischecked: boolean) => void,
-	is_striped: boolean
-	is_bordered:boolean
+	is_striped: boolean,
+	is_bordered:boolean,
+	is_hovered:boolean,
+	row_style: string,
+	data_style:string
 }
 
 export function TableRow(props: ItableRow) {
 
 	return (
-		<tr className={`hover:bg-gray-50 ${props.is_bordered ? "border-b border-gray-200":""} 
-						${utilsClass.isEven(props.index + 1) && props.is_striped? 'bg-gray-50' : ''}`}>
+		<tr className={`${props.is_hovered ? "hover:bg-gray-50 ":""} 
+						${props.is_bordered ? "border-b border-gray-200 ":""} 
+						${utilsClass.isEven(props.index + 1) && props.is_striped? 'bg-gray-50 ' : ''}`
+						+ props.row_style}>
 
 			{props.use_bulk_action &&
-				<td className="px-2 py-4 pl-4 text-base ">
+				<td className={"px-2 py-4 pl-4 text-base "+ props.data_style}>
 					<input className="w-4 h-4" type="checkbox"
 						checked={props.checked_set.has(props.index)}
 						onChange={(ev) => props.setCheck(props.active_page_number, props.index, ev.target.checked)} />
@@ -46,7 +51,11 @@ export function TableRow(props: ItableRow) {
 
 			{
 				props.columns.map((column: Icolumn, index: number) => {
-					return <TableData key={index.toString()} col={column} row={props.row} render={props.render} />
+					return <TableData key={index.toString()} 
+									  col={column} 
+									  row={props.row} 
+									  render={props.render}
+									  style={props.data_style} />
 				})
 			}
 		</tr>
@@ -55,11 +64,11 @@ export function TableRow(props: ItableRow) {
 
 
 
-export function TableData(props: { col: Icolumn, row: Irow, render?: renderFunction }) {
+export function TableData(props: { col: Icolumn, row: Irow, render?: renderFunction, style:string }) {
 
 	var display_value = utilsClass.unwindObject(props.row, props.col.field);
 	return (
-		<td className="px-2 py-4 " style={{ "fontSize": "0.9rem" }}>
+		<td className={"px-2 py-4 text-sm "+props.style} >
 
 			{
 				(props.render && props.render(props.row, props.col, display_value)) || display_value
@@ -73,7 +82,9 @@ interface Ithead {
 	use_bulk_action: boolean,
 	page_data: IPerPage,
 	active_page_number: number,
-	mass_checking: (page_number: number, action: "check-all" | "uncheck-all") => void
+	mass_checking: (page_number: number, action: "check-all" | "uncheck-all") => void,
+	row_style: string,
+	data_style: string
 }
 
 export function TableHead(props: Ithead) {
@@ -101,24 +112,24 @@ export function TableHead(props: Ithead) {
 		return column.use_in_display !== false;
 	});
 
-	return <tr className="bg-brand-table-color text-left" style={{ "fontFamily": 'Source Sans Pro' }}>
+	return <tr className={"bg-yellow-50 text-left "+props.row_style} >
 
 		{
 			props.use_bulk_action &&
-			<th className="text-base font-semibold text-black py-3.5 px-2 pl-4" style={{ "fontSize": "0.95rem" }}>
+			<th className={"text-base font-semibold text-gray-700 py-3.5 px-2 pl-4 "+props.data_style} >
 				{
 					all_is_checked && < CheckedBox onClick={() => props.mass_checking(page, 'uncheck-all')}
-						className="fill-current text-gray-700 w-4 h-4 cursor-pointer" />
+						className="fill-current w-5 h-5 cursor-pointer" />
 				}
 
 				{
 					some_ischecked && < IndeterminateCheckBox onClick={() => props.mass_checking(page, 'check-all')}
-						className="fill-current text-gray-700 w-5 h-5 cursor-pointer" />
+						className="fill-current w-5 h-5 cursor-pointer" />
 				}
 
 				{
 					none_is_checked && < UnCheckedBox onClick={() => props.mass_checking(page, 'check-all')}
-						className="fill-current text-gray-700 w-5 h-5 cursor-pointer" />
+						className="fill-current w-5 h-5 cursor-pointer" />
 				}
 			</th>
 		}
@@ -128,10 +139,10 @@ export function TableHead(props: Ithead) {
 				// if item is the first in array, then padd left
 				// if it is last, then pad right
 				return <th key={index.toString()}
-					className={`text-base font-semibold text-black py-3.5 px-2 
+						   className={`text-base font-semibold text-black py-3.5 px-2 
 			    					${!props.use_bulk_action && index === 0 ? 'pl-4 ' : ''}
-			    					${index === (display_columns.length - 1) ? 'pr-4 ' : ''}`}
-					style={{ "fontSize": "0.95rem" }}>
+			    					${index === (display_columns.length - 1) ? 'pr-4 ' : ''} ` +props.data_style}
+						>
 					{column.use ? column.use : column.field}
 				</th>
 
@@ -140,25 +151,21 @@ export function TableHead(props: Ithead) {
 	</tr>
 }
 
-
-
-export function TableCaption(props: { text: string }) {
-
-	return <div className="flex mt-4 px-4 mb-1 text-base font-semibold tracking-wide leading-7 text-gray-700">
+export function TableCaption(props: { text: string, style:string }) {
+	return <div className={"flex mt-4 px-4 mb-1 text-base font-semibold tracking-wide leading-7 text-gray-700 "+ props.style}>
 		<h4 className=" ml-1 react-table-top">
 			{props.text}
 		</h4>
 	</div>
-
 }
 
 
-export function TableSearch(props: { onSearch: (text: string) => void }) {
+export function TableSearch(props: { onSearch: (text: string) => void, style: string }) {
 
 	return <div className="relative flex items-center mt-3 md:mt-0">
 		<input type="text" name="search"
-			className="text-xs py-2 h-10 px-4 pl-6 w-52 md:w-auto focus:outline-none leading-9 tracking-wide 
-			text-gray-700 border  border-gray-300 bg-gray-100 rounded-lg"
+			className={`text-xs py-2 h-10 px-4 pl-6 w-52 md:w-auto focus:outline-none leading-9 tracking-wide 
+			text-gray-700 border border-gray-300 bg-gray-100 rounded-lg  `+ props.style}
 			placeholder="SEARCH"
 			onChange={(ev: React.ChangeEvent<HTMLInputElement>) => props.onSearch(ev.target.value)} />
 		<Search className="absolute w-2.5 h-2.5 ml-2" style={{ top: '0.9rem' }} />
@@ -173,11 +180,11 @@ interface IexportProps {
 	file_name: string, 
 	processFunc?: stringRenderFunc, 
 	bg_color?: string, 
-	text_color: string
+	text_color: string,
+	style: string
 }
 export function TableExport(props: IexportProps) {
-
-	return <div className={`flex items-center ${props.text_color}  cursor-pointer order-first md:order-none self-end md:self-auto`}
+	return <div className={`flex items-center ${props.text_color} cursor-pointer order-first md:order-none self-end md:self-auto `+props.style}
 		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)} >
 		<Import className="fill-current w-3 h-3 mr-2 " />
 		<p className="font-normal text-base">{props.export_text}</p>
@@ -185,12 +192,11 @@ export function TableExport(props: IexportProps) {
 
 }
 
-export function TableTop(props: { children?: React.ReactNode }) {
+export function TableTop(props: { children?: React.ReactNode, style:string }) {
 	return <Fragment>
 		{
-			props.children && <div className="flex flex-col md:flex-row md:items-center py-2 justify-between px-4 mt-4 mb-2 react-table-top" >
+			props.children && <div className={"flex flex-col md:flex-row md:items-center py-2 justify-between px-4 mt-4 mb-2 react-table-top "+props.style} >
 				{props.children}
-
 			</div>
 		}
 	</Fragment>
@@ -198,7 +204,16 @@ export function TableTop(props: { children?: React.ReactNode }) {
 }
 
 
-export function TableBulkAction(props: { action_options: string[], eventSelected: (option: string) => void, bg_color : string, text_color ?: string}) {
+export interface ItableActProps { 
+	action_options: string[], 
+	eventSelected: (option: string) => void, 
+	bg_color : string, 
+	text_color ?: string,
+	dropdown_style: string,
+	button_style: string,
+	button_text: string
+}
+export function TableBulkAction(props: ItableActProps) {
 
 	const [currentOption, setOption] = useState('nothing');
 	let isNothing = currentOption === 'nothing';
@@ -224,9 +239,9 @@ export function TableBulkAction(props: { action_options: string[], eventSelected
 			<select
 				onChange={optionChange}
 				value={currentOption}
-				className="leading-tight block appearance-none w-full bg-white flex-shrink 
-								   border border-gray-200 px-3 py-2 pr-8 rounded ">
-				<option value="nothing">Pick...</option>
+				className={`leading-tight block appearance-none w-full bg-white flex-shrink 
+								   border border-gray-200 px-3 py-2 pr-8 rounded `+ props.dropdown_style}>
+				<option value="nothing">Select ...</option>
 				{
 					props.action_options.map((value: string, index: number) => {
 						return <option key={index.toString()} value={value}>{value}</option>
@@ -240,7 +255,11 @@ export function TableBulkAction(props: { action_options: string[], eventSelected
 			</div>
 		</div>
 
-		<Button bg_color={props.bg_color} px="px-4" className={`${isNothing?'opacity-50':''} leading-4`} disabled={isNothing} onClick={takeAction} >Apply</Button>
+		<Button bg_color={props.bg_color} px="px-4" 
+				className={`${isNothing?'opacity-50':''} leading-4 `+props.button_style} 
+				disabled={isNothing}
+				uppercase={false} 
+				onClick={takeAction} >{props.button_text}</Button>
 	</div>
 }
 
@@ -251,11 +270,17 @@ interface Ifooter {
 	active_page: number,
 	total_pages: number,
 	onPageChange: (page_number: number) => void,
-	bg_color: string
+	bg_color: string,
+	main_style: string,
+	statistics_main_style: string,
+	statistics_number_style: string,
+	number_box_Style: string
 }
 
 export function Footer(props: Ifooter) {
-	const { active_page, page_number_list, paginated_map } = props;
+	const { active_page, page_number_list, paginated_map,main_style,
+			statistics_main_style,statistics_number_style,number_box_Style} = props;
+	// statistics_number_style
 
 	let page_count = props.page_number_list.length;
 
@@ -277,25 +302,27 @@ export function Footer(props: Ifooter) {
 	}
 
 	return page_count > 0 ?
-		<div className="flex flex-col md:flex-row justify-between mt-6 items-center px-2 w-full md:w-auto">
+		<div className={"flex flex-col md:flex-row justify-between mt-6 items-center px-2 w-full md:w-auto "+main_style}>
 			<div>
-				<p className="text-sm">
+				<p className={"text-sm "+statistics_main_style}>
 					Showing
-				<strong> {paginated_map[active_page].from_index + 1}</strong>  to
-				<strong> {paginated_map[active_page].from_index + paginated_map[active_page].page_row_array.length}</strong> of
-				<strong> {props.total_pages}</strong> entries
+				<span className={"font-bold "+statistics_number_style}> {paginated_map[active_page].from_index + 1} </span>  
+				to
+				<span className={"font-bold "+statistics_number_style}> {paginated_map[active_page].from_index + paginated_map[active_page].page_row_array.length} </span> 
+				of
+				<span className={"font-bold "+statistics_number_style}> {props.total_pages} </span>entries
 			</p>
 			</div>
 
 			<div className="flex rounded overflow-hidden border mt-2 md:mt-0 w-full md:w-auto">
 
-				<div className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
-							${paginated_map[active_page].back_button_clickable ?
-						'cursor-pointer' : 'cursor-not-allowed'}`}
-					onClick={() => nextBackBtnClick('bck')}>
-					<p className={`text-sm  
-							${paginated_map[active_page].back_button_clickable ?
-							'text-gray-700' : 'text-gray-400'}`}>
+				<div className={`text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
+							  ${paginated_map[active_page].back_button_clickable ?
+							  ' cursor-pointer ' : ' cursor-not-allowed '} 
+							  ${paginated_map[active_page].back_button_clickable ?'text-gray-700' : 'text-gray-400'} 
+							  `+number_box_Style}
+					 onClick={() => nextBackBtnClick('bck')}>
+					<p>
 						<svg className="transform rotate-180 fill-current" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M0.772277 9.90938L0.837937 9.85312L5.73111 5.60312C5.89682 5.45937 6 5.24375 6 5.00313C6 4.7625 5.89369 4.54688 5.73111 4.40312L0.847317 0.15625L0.766024 0.0843749C0.687858 0.0312499 0.59406 0 0.494007 0C0.221991 0 0 0.23125 0 0.51875V9.48125C0 9.76875 0.221991 10 0.494007 10C0.597186 10 0.694111 9.96562 0.772277 9.90938Z" />
 						</svg>
@@ -319,34 +346,35 @@ export function Footer(props: Ifooter) {
 											  is_active_page={is_active_page}
 											  page_number={page_number} 
 											  pageClick={pageClick}
-											  bg_color={props.bg_color} />
+											  bg_color={props.bg_color}
+											  style={number_box_Style} />
 						})
 
 						/* Else IF */
 						: active_page >= 1 && active_page <= 6 ?
 							/* if the active page is nin the beginning of the pagination list*/
 							<ActivePageBegining pageClick={pageClick} page_number_list={page_number_list}
-								active_page={active_page} bg_color={props.bg_color} />
+								active_page={active_page} bg_color={props.bg_color} style={number_box_Style} />
 
 							/* Else IF  The current active page is at the ending of the Pagination list*/
 							: active_page >= page_count - 5 && active_page <= page_count ?
 								<ActivePageEnding pageClick={pageClick} page_number_list={page_number_list}
-									active_page={active_page} bg_color={props.bg_color} />
+									active_page={active_page} bg_color={props.bg_color} style={number_box_Style} />
 
 								/* Else  the active page is in the middle of the pagination list*/
 								: <ActivePageMiddle pageClick={pageClick} page_number_list={page_number_list}
-									active_page={active_page} bg_color={props.bg_color}/>
+									active_page={active_page} bg_color={props.bg_color} style={number_box_Style}/>
 				}
 
 
 
-				<div className={`w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
-						${paginated_map[active_page].forward_button_clickable
-						? 'cursor-pointer' : 'cursor-not-allowed'}`}
+				<div className={`text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
+							  ${paginated_map[active_page].forward_button_clickable ?
+							  ' cursor-pointer ' : ' cursor-not-allowed '} 
+							  ${paginated_map[active_page].forward_button_clickable ?'text-gray-700' : 'text-gray-400'} 
+							  `+number_box_Style}
 					onClick={() => nextBackBtnClick('nxt')}>
-					<p className={`text-sm  
-							${paginated_map[active_page].forward_button_clickable ?
-							'text-gray-700' : 'text-gray-400'}`}>
+					<p >
 						<svg className="fill-current" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M0.772277 9.90938L0.837937 9.85312L5.73111 5.60312C5.89682 5.45937 6 5.24375 6 5.00313C6 4.7625 5.89369 4.54688 5.73111 4.40312L0.847317 0.15625L0.766024 0.0843749C0.687858 0.0312499 0.59406 0 0.494007 0C0.221991 0 0 0.23125 0 0.51875V9.48125C0 9.76875 0.221991 10 0.494007 10C0.597186 10 0.694111 9.96562 0.772277 9.90938Z" />
 						</svg>
@@ -360,7 +388,15 @@ export function Footer(props: Ifooter) {
 		: null;
 }
 
-function ActivePageBegining(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void, bg_color: string }) {
+export interface IPageNumberGroup{
+	page_number_list: number[]; 
+	active_page: number; 
+	pageClick: (page: number) => void, 
+	bg_color: string, 
+	style: string 
+}
+
+function ActivePageBegining(props:IPageNumberGroup) {
 
 	//Get the page that is last
 	let last_page: number = props.page_number_list[props.page_number_list.length - 1];
@@ -368,20 +404,21 @@ function ActivePageBegining(props: { page_number_list: number[]; active_page: nu
 		{
 			props.page_number_list.slice(0, 7).map((page_number) => {
 				let is_active_page = page_number === props.active_page;
-				return <NumberBox key={page_number} is_active_page={is_active_page}
-					page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
+				return <NumberBox key={page_number} is_active_page={is_active_page} style={props.style}
+								  page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
 			})
 		}
 
 		<DottedBox />
 
-		<NumberBox page_number={last_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color}/>
+		<NumberBox page_number={last_page} is_active_page={false} style={props.style}
+				   pageClick={props.pageClick} bg_color={props.bg_color}/>
 
 	</Fragment>
 
 }
 
-function ActivePageMiddle(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void,bg_color: string }) {
+function ActivePageMiddle(props: IPageNumberGroup) {
 
 	//Get the page that is last
 	let first_page: number = props.page_number_list[0];
@@ -391,22 +428,24 @@ function ActivePageMiddle(props: { page_number_list: number[]; active_page: numb
 	return <Fragment>
 
 		{/*  The First */}
-		<NumberBox page_number={first_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color} />
+		<NumberBox page_number={first_page} is_active_page={false} style={props.style}
+				   pageClick={props.pageClick} bg_color={props.bg_color} />
 
 		<DottedBox />
 
 		{
 			props.page_number_list.slice(props.active_page - 4, props.active_page + 3).map((page_number) => {
 				let is_active_page = page_number === props.active_page;
-				return <NumberBox key={page_number} is_active_page={is_active_page}
-					page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
+				return <NumberBox key={page_number} is_active_page={is_active_page} style={props.style}
+								  page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
 			})
 		}
 
 		<DottedBox />
 		{/*  The last */}
 
-		<NumberBox page_number={last_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color} />
+		<NumberBox page_number={last_page} is_active_page={false} style={props.style}
+				   pageClick={props.pageClick} bg_color={props.bg_color} />
 
 
 	</Fragment>
@@ -415,21 +454,22 @@ function ActivePageMiddle(props: { page_number_list: number[]; active_page: numb
 
 
 
-function ActivePageEnding(props: { page_number_list: number[]; active_page: number; pageClick: (page: number) => void, bg_color: string}) {
+function ActivePageEnding(props:IPageNumberGroup) {
 
 	//Get the page that is last
 	let first_page: number = props.page_number_list[0];
 	let page_count = props.page_number_list.length;
 	return <Fragment>
 
-		<NumberBox page_number={first_page} is_active_page={false} pageClick={props.pageClick} bg_color={props.bg_color} />
+		<NumberBox page_number={first_page} is_active_page={false} style={props.style}
+				   pageClick={props.pageClick} bg_color={props.bg_color} />
 
 		<DottedBox />
 		{
 			props.page_number_list.slice(page_count - 7, page_count).map((page_number) => {
 				let is_active_page = page_number === props.active_page;
-				return <NumberBox key={page_number} is_active_page={is_active_page}
-					page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
+				return <NumberBox key={page_number} is_active_page={is_active_page} style={props.style}
+								  page_number={page_number} pageClick={props.pageClick} bg_color={props.bg_color} />
 			})
 		}
 
@@ -449,13 +489,21 @@ function DottedBox() {
 	</div>
 }
 
+export interface IBoxNumber{ 
+	page_number: number, 
+	is_active_page: boolean, 
+	pageClick: (page: number) => void, 
+	bg_color:string,
+	style:string
+}
 
-function NumberBox(props: { page_number: number, is_active_page: boolean, pageClick: (page: number) => void, bg_color:string }) {
-	return <div className={`w-7 h-7 md:w-8 md:h-8 flex items-center flex-grow flex-shrink md:flex-shrink-0 justify-around border-r cursor-pointer
-									${props.is_active_page ? props.bg_color : ''}`}
+function NumberBox(props: IBoxNumber) {
+	return <div className={`text-sm w-7 h-7 md:w-8 md:h-8 flex items-center flex-grow flex-shrink 
+							md:flex-shrink-0 justify-around border-r cursor-pointer 
+							${props.is_active_page ? props.bg_color : ''}
+							${props.is_active_page ? ' text-white ' : ''}`+ props.style}
 		onClick={() => props.pageClick(props.page_number)}>
-		<p className={`${props.is_active_page ? 'text-white' : ''} text-sm`}>
-
+		<p>
 			{
 				props.page_number
 			}

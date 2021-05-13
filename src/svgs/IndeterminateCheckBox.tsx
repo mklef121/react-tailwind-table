@@ -1,15 +1,10 @@
 import React from "react";
 export default function IndeterminateCheckBox<T extends Record<string, any>>(props?: T) {
 	return (
-		<svg  {...props} viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-			<rect width={50} height={50} fill="url(#pattern0)" />
-			<defs>
-				<pattern id="pattern0" patternContentUnits="objectBoundingBox" width={1} height={1}>
-					<use xlinkHref="#image0" transform="scale(0.02)" />
-				</pattern>
-				<image id="image0" width={50} height={50} xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAABMElEQVRoge2ZQUoDQRBFnxIRvIOJ9wiS5BguzCpLryB6CN2ICrrQawjiQSR3CISAcZEEYpNux+q0Uxn+g1o0dM38x9QMAw1CCLFL7FXYMwDOgePCWWKMgWfgLeci18DcSV1ZJQYOwofVi4XdT4gM/+b9L0QztRJN7WD9SuacGugDZ2vrk9jGlEj4tD6Au4xQFg74KRKdoNRo7RQS8YZEvCERb0jEG40RSf2i/MYhcLStIEsmwNTSmCMyAm4y+jdxAdxaGhszWhLxRs47cg+8bCvIkom1MUdkivELU4LGjJZEvCERb0jEGxLxRmNEUr8oX8G6C8wKZtlEN1iHmSrxSP3nIWE9WET6DoKHdWoRgcVxV93hV3WZClrlMLTH4jC0U2FvCT6BJ+C9pvsLIUQBvgGQKsodQE+KFgAAAABJRU5ErkJggg==" />
-			</defs>
+		<svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+			<path d="M160.48 0h32v32h-32zM224.48 0h32v32h-32z"/>
+			<path d="M432 0H288.464v32H432c26.51 0 48 21.49 48 48v352c0 26.51-21.49 48-48 48H80c-26.51 0-48-21.49-48-48V80c0-26.51 21.49-48 48-48h48.464V0H80C35.839.053.053 35.839 0 80v352c.053 44.161 35.839 79.947 80 80h352c44.161-.053 79.947-35.839 80-80V80c-.053-44.161-35.839-79.947-80-80z"/>
+			<path d="M128 240h256v32H128z"/>
 		</svg>
-
 	)
 }

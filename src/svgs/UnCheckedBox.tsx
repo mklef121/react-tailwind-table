@@ -2,15 +2,10 @@ import React from "react";
 
 export default function UnCheckedBox<T extends Record<string, any>>(props?: T) {
 	return (
-		<svg {...props} viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
-			<rect width={50} height={50} fill="url(#pattern0)" />
-			<defs>
-				<pattern id="pattern0" patternContentUnits="objectBoundingBox" width={1} height={1}>
-					<use xlinkHref="#image0" transform="scale(0.02)" />
-				</pattern>
-				<image id="image0" width={50} height={50} xlinkHref="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAA8klEQVRoge2ZzQnCQBBGn6Jl+NNHkCRleNBOROsQFPRiG4JYiFiGoB6CoIu7xA0xE/gezGFgknyP3VMGhBCiTXRKzOTADBjUnMXHFdgDxyovWQEPI7WMlcgNhHcr9YXtBkTmv3n/BW+mXuChodMfqHhPI8iA6Vs/9g2GRNzTOgPrCqFi6PMp4r1BoavVKiRiDYlYQyLWkIg1JGINiVhDItaQiDUkYg2JWEMi1pCINSRijdC/37vTJ8CtxizfSJzezVSKLc3vQ9zaxIhkBoK7NYkRgWLd1XT4Vy1CQcssQ1OKZeioxGwdXIAdcGro+0IIUQNPs7jB8hlJ65kAAAAASUVORK5CYII=" />
-			</defs>
-		</svg>
-
+		<svg {...props} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.381 15.381">
+			<path d="M12.016 15.381h-8.65A2.83 2.83 0 01.54 12.556v-9.73A2.83 2.83 0 013.366 0h8.65a2.829 2.829 0 012.825 2.826v9.73a2.828 2.828 0 01-2.825 2.825zM3.366 1.305c-.839 0-1.521.683-1.521 1.521v9.73c0 .838.683 1.521 1.521 1.521h8.65c.839 0 1.521-.684 1.521-1.521v-9.73c0-.839-.683-1.521-1.521-1.521h-8.65z" 
+			/>
+		</svg> 
 	)
 }
+

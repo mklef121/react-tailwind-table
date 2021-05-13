@@ -36,14 +36,9 @@ class App extends React.Component {
 
   rowcheck = (row,column, display_text) => {
 
-    if (column.field === "created_at") {
-      return <button className="border p-2">See button</button>
+    if (column.field === "action") {
+      return <button className="border border-gray-100 p-2 bg-blue-500 text-white rounded-md">Save Player</button>
     }
-
-    if (column.field === "name") {
-      return <b>{display_text}</b>
-    }
-
     return display_text
   }
 
@@ -60,6 +55,9 @@ class App extends React.Component {
         // export_modify={exportModify}
         striped={true}
         bordered={true}
+        hovered={true}
+        styling={tableStyling}
+        row_render ={this.rowcheck}
         ></Table>
       </div>
     ) 
@@ -68,12 +66,12 @@ class App extends React.Component {
 }
 
 function tableBulkClick(option,value){
-  console.log(option,value)
+  // console.log(option,value)
 }
 
 
 function onSearch(text,values){
-  console.log(text,values)
+  // console.log(text,values)
 }
 
 function exportModify(a,b,c){
@@ -83,7 +81,39 @@ function exportModify(a,b,c){
 }
 
 
-
+const tableStyling = {
+  // base_bg_color:"bg-green-600",
+  // base_text_color:"text-green-600",
+  top:{
+    // title:"text-red-700"
+    elements: {
+      // main: "bg-green-700",
+      // search: "text-white",
+      bulk_select:{
+        // main:"bg-green-700 text-white",
+        // button:"bg-yellow-700 text-black px-5 "
+      },
+      // export:"text-yellow-800"
+    }
+  },
+  table_head:{
+    // table_row: "bg-green-800 text-white",
+    // table_data:"text-white"
+  },
+  table_body:{
+    // main:"bg-red-600",
+    // table_row:"text-yellow-900",
+    // table_data: "text-base"
+  },
+  footer:{ 
+    // main: "bg-yellow-700",
+    statistics:{
+      // main: "bg-white text-green-900",
+      // bold_numbers:"text-yellow-800 font-thin"
+    },
+    // page_numbers:"bg-red-600 text-white"
+  }
+}
 
  function column() {
     return [

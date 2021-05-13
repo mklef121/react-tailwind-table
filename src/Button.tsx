@@ -11,6 +11,7 @@ interface buttonProps extends Record<string, any>{
 
 export default function Button(props: buttonProps) {
 	const {uppercase,className, text, px, py, children,bg_color, ...others} = props;
+	
 	var myclass = `${uppercase ? 'uppercase ':' ' } ${px ? px:'px-5'} ${px ? px:'px-5'} ${py ? py:'py-2'}
 				   ${bg_color} 
 				    appearance-none text-white rounded`;

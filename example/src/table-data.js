@@ -19,8 +19,12 @@ export const col = [
  {
    field: "club_id",
    use: "Club Details",
+ },
+ {
+  field: "action",
+  use: "Action",
 
- }
+}
  ]
 
 export const row = [

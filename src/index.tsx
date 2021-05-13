@@ -191,9 +191,25 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 
 	}
 
+	private getStylingProps(): ItableStyle{
+		let styling = this.props.styling as ItableStyle;
+		if(styling ){
+			styling.base_bg_color = styling.base_bg_color ?? base_bg_color;
+			styling.base_text_color = styling.base_text_color ?? base_text_color;
+		}
+		else{
+			styling = {
+				base_bg_color: base_bg_color,
+				base_text_color: base_text_color
+			}
+		}
+
+		return styling;
+	}
+
 
 	render() {
-		const styling = this.props.styling as ItableStyle;
+		let styling = this.getStylingProps();
 		const display_columns = this.props.columns.filter((column: Icolumn) => {
 			//Dont show columns the developer indicated should be false
 			return column.use_in_display !== false;
@@ -203,18 +219,21 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 		//Also don't show the bulk select if then user did not send in an array of `bulk_select_options` props
 		const useBulk = this.state.page_number_list.length < 1 ?
 			false : (this.props.bulk_select_options as string[]).length > 0 ? true : false
-		return <div className="bg-white w-full flex flex-col pb-5" style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
+		return <div className={`bg-white w-full flex flex-col pb-5 ${styling.main ?? ''}`} style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
 			{/* Table Caption*/
-				this.props.table_header && <TableCaption text={this.props.table_header} />
+				this.props.table_header && <TableCaption text={this.props.table_header} style={styling?.top?.title ?? ""} />
 			}
 
 			{
-				<TableTop>
-					<TableSearch onSearch={this.onSearch} />
+				<TableTop style={styling?.top?.elements?.main ?? ""}>
+					<TableSearch onSearch={this.onSearch} style={styling?.top?.elements?.search ?? ""} />
 					{
 						useBulk && this.isBulkSelected() ? <TableBulkAction action_options={this.props.bulk_select_options as string[]} 
 																			eventSelected={this.bulkActClick}
-																			bg_color={styling.base_bg_color as string} />
+																			button_text={this.props.bulk_select_button_text as string}
+																			bg_color={styling.base_bg_color as string}
+																			dropdown_style={styling?.top?.elements?.bulk_select?.main ?? ""}
+																			button_style ={styling?.top?.elements?.bulk_select?.button ?? ""} />
 								: null
 					}
 					
@@ -224,21 +243,24 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 							     								 cols={this.props.columns}
 																 file_name={this.props.export_csv_file as string}
 							     								 processFunc={this.props.export_modify}
-																 text_color={styling.base_text_color as string}/> 
+																 text_color={styling.base_text_color as string}
+																 style={styling?.top?.elements?.export ?? ""}/> 
 					}
 
 				</TableTop>
 			}
-
+		<div className="overflow-x-auto">
 			<table className="table-auto border-collapse w-full">
 				<thead >
 					<TableHead columns={display_columns} use_bulk_action={useBulk}
 						active_page_number={this.state.active_page_number}
 						page_data={this.state.paginated_map[this.state.active_page_number]}
-						mass_checking={this.massChecking} />
+						mass_checking={this.massChecking} 
+						row_style={styling?.table_head?.table_row ?? ""}
+						data_style={styling?.table_head?.table_data ?? ""} />
 				</thead>
 
-				<tbody className="text-sm font-normal text-gray-700">
+				<tbody className={"text-sm font-normal text-gray-700 "+styling?.table_body?.main??""}>
 					{
 						(this.state.active_rows.length > 0 &&
 							(this.state.active_rows as Irow[]).map((row: Irow, index: number) =>
@@ -249,7 +271,10 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 									checked_set={this.state.paginated_map[this.state.active_page_number].checked_set}
 									setCheck={this.checkBoxCheck}
 									is_striped ={this.props.striped as boolean}
-									is_bordered ={this.props.bordered as boolean} />
+									is_bordered ={this.props.bordered as boolean}
+									is_hovered={this.props.hovered as boolean} 
+									row_style={styling?.table_body?.table_row ?? ""}
+									data_style={styling?.table_body?.table_data ?? ""} />
 							)) ||
 
 						<tr className="hover:bg-table-col bg-table-col border-b border-gray-200 ">
@@ -262,20 +287,34 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 					}
 				</tbody>
 			</table>
-
+		</div>
 			<Footer page_number_list={this.state.page_number_list}
 				paginated_map={this.state.paginated_map}
 				active_page={this.state.active_page_number}
 				total_pages={this.getTotalPages()}
 				onPageChange={this.onPageChange}
-				bg_color={styling.base_bg_color as string} />
+				bg_color={styling.base_bg_color as string}
+				main_style = {styling?.footer?.main ?? ""} 
+				statistics_main_style = {styling?.footer?.statistics?.main ?? ""}
+				statistics_number_style = {styling?.footer?.statistics?.bold_numbers ?? ""} 
+				number_box_Style = {styling?.footer?.page_numbers ?? ""}/>
 		</div>
 	}
 
 }
 
-
-
+const tableTopProps = PropTypes.shape({
+	title: PropTypes.string,
+	elements: PropTypes.shape({
+		main: PropTypes.string,
+		search: PropTypes.string,
+		bulk_select: PropTypes.shape({
+			main: PropTypes.string,
+			button: PropTypes.string
+		}),
+		export: PropTypes.string
+	})
+})
 
 ReactTailwindTable.propTypes = {
 	/**
@@ -308,8 +347,6 @@ ReactTailwindTable.propTypes = {
 	show_search: PropTypes.bool,
 	should_export: PropTypes.bool,
 	// use_server_side: PropTypes.bool,
-	// use_bulk_action: PropTypes.bool,
-
 	debounce_search: PropTypes.number,
 	total_page_count: PropTypes.number,
 	per_page: PropTypes.number,
@@ -330,7 +367,26 @@ ReactTailwindTable.propTypes = {
 	bordered: PropTypes.bool,
 	styling: PropTypes.shape({
 		base_bg_color: PropTypes.string,
-		base_text_color: PropTypes.string
+		base_text_color: PropTypes.string,
+		main: PropTypes.string,
+		top: tableTopProps,
+		table_head: PropTypes.shape({
+			table_row: PropTypes.string,
+			table_data: PropTypes.string
+		}),
+		table_body:PropTypes.shape({
+			main: PropTypes.string,
+			table_row: PropTypes.string,
+			table_data: PropTypes.string
+		}),
+		footer: PropTypes.shape({
+			main: PropTypes.string,
+			statistics: PropTypes.shape({
+				main: PropTypes.string,
+				bold_numbers: PropTypes.string
+			}),
+			page_numbers: PropTypes.string
+		})
 	}),
 }
 
@@ -340,15 +396,15 @@ ReactTailwindTable.defaultProps = {
 	debounce_search: 300,
 	show_search: true,
 	should_export: true,
-	// use_bulk_action: true,
 	bulk_select_options: [],
 	export_text: 'Export',
 	export_csv_file: "file_name",
+	bulk_select_button_text:"Pressure",
 	striped: true,
 	bordered: true,
-	styling:{
-		base_bg_color:"bg-pink-700",
-		base_text_color:"text-pink-700"
-	}
+	hovered:true,
 };
+
+const base_bg_color = "bg-pink-700";
+const base_text_color = "text-pink-700"
 

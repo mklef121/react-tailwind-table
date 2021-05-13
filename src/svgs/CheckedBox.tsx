@@ -1,9 +1,8 @@
 import React from "react";
 export default function CheckedBox<T extends Record<string, any>>(props?: T) {
 	return (
-		<svg {...props} width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-		<path fillRule="evenodd" clipRule="evenodd" d="M4.9 7.1L3.5 8.5 8 13 18 3l-1.4-1.4L8 10.2 4.9 7.1zM16 16H2V2h10V0H2C.9 0 0 .9 0 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8h-2v8z" />
+		<svg  viewBox="0 0 512 512" {...props} xmlns="http://www.w3.org/2000/svg">
+			<path d="m452 512h-392c-33.085938 0-60-26.914062-60-60v-392c0-33.085938 26.914062-60 60-60h392c33.085938 0 60 26.914062 60 60v392c0 33.085938-26.914062 60-60 60zm-392-472c-11.027344 0-20 8.972656-20 20v392c0 11.027344 8.972656 20 20 20h392c11.027344 0 20-8.972656 20-20v-392c0-11.027344-8.972656-20-20-20zm370.898438 111.34375-29.800782-26.6875-184.964844 206.566406-107.351562-102.046875-27.558594 28.988281 137.21875 130.445313zm0 0"/>
 		</svg>
-
 	)
 }

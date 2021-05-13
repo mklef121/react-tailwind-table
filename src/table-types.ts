@@ -39,9 +39,11 @@ export interface Iprop {
 	// use_bulk_action?: boolean,
 	export_text?: string,
 	bulk_select_options?: string[],
+	bulk_select_button_text ?: string,
 	export_csv_file ?: string,
 	striped ?: boolean,
 	bordered ?: boolean,
+	hovered?: boolean,
 
 	row_render?: renderFunction,
 	on_search?: (search_word: string, result?: Irow[] | []) => void,
@@ -56,34 +58,38 @@ export interface Iprop {
 }
 
 export interface ItableStyle {
-	base_bg_color ?: string,
-	base_text_color ?: string,
-	top ?:{
-		main ?: string,
-		title ?: string,
-		elements ?:{
-			main ?: string,
-			search ?: string,
-			bulk_select ?: {
-				main ?:string,
-				button ?: string
-			},
-			export ?:string
-
-		}
-
+	base_bg_color?: string,
+	base_text_color?: string,
+	main?: string,
+	top?: ItableTop,
+	table_head?: {
+		table_row?: string,
+		table_data?: string
 	},
-	table_head:{
-		table_row ?: string,
-		table_data ?: string
-	},
-	table_body:{
-		main ?: string,
-		table_row ?: string,
-		table_data ?: string
+	table_body?: {
+		main?: string,
+		table_row?: string,
+		table_data?: string
 	},
 	footer?: {
-		main?: string
+		main?: string,
+		statistics?:{
+			main ?: string,
+			bold_numbers ?: string
+		},
+		page_numbers?: string
+	}
+}
+export interface ItableTop {
+	title?: string,
+	elements?: {
+		main?: string,
+		search?: string,
+		bulk_select?: {
+			main?: string,
+			button?: string
+		},
+		export?: string
 	}
 }
 
