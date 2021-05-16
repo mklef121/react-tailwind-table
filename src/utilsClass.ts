@@ -78,17 +78,6 @@ export default class utilsClass {
     }
 
     /**
-     * This runs a check to find out if a value pass in was string or not
-     * existing elements and/or adding new elements using an in-place algorithm.
-     */
-    static isStringLike(str: any): Boolean {
-        if (str && typeof str.valueOf() === "string") {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * A Function to determine if two objects are arrays are equal
      *
      * V = value, O= object, O = other,T = Type, OOT =  Other Object Type
@@ -365,6 +354,7 @@ export default class utilsClass {
     //It will not be included in the search 
     static sanitizeRow(row: Irow, columns: Icolumn[]): object {
         var final_obj: Record<string, any> = {};
+        
         for (var i = 0, len = columns.length; i < len; ++i) {
             if (columns[i].use_in_search === false) {
                 continue;
@@ -509,111 +499,6 @@ export default class utilsClass {
             page_number_list,
             total_data_count
         }
-    }
-
-//regular expression showing a whitespace
-static rnothtmlwhite = (/[^\x20\t\r\n\f]+/g);
-
-//Turn element classes to arrays
-  static classesToArray(value: string | []) {
-    if (Array.isArray(value)) {
-      return value;
-    }
-    if (utilsClass.isStringLike(value)) {
-      return value.match(utilsClass.rnothtmlwhite) || [];
-    }
-    return [];
-  }
-
-
-    // Strip and collapse whitespace according to HTML spec
-  // https://infra.spec.whatwg.org/#strip-and-collapse-ascii-whitespace
-  static stripAndCollapse(value:string) {
-    if (!value) return null;
-
-    //Match any value that is not an empty space, then join by a single empty space
-    var tokens = value.match(utilsClass.rnothtmlwhite) || [];
-    return tokens.join(" ");
-  }
-static getClass(elem:Element) {
-    return (elem.getAttribute && elem.getAttribute("class")) || "";
-  }
-  //I borrowed this from Jquery
-  static removeClass(element: Element, value:string):Element {
-    var classes, cur, curValue, clazz, j, finalValue;
-    //Turn the class I want to remove to array
-    classes = utilsClass.classesToArray(value);
-    //If any class is returned
-    if (classes.length) {
-      //Get the classes this element has
-      curValue = utilsClass.getClass(element);
-      // This expression is here for better compressibility
-      //I also follow this documentation https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
-      //To ensire that its an Element Node been processed
-      // Then I strip off all excessive spaces between classes
-      cur = element.nodeType === 1 && (" " + utilsClass.stripAndCollapse(curValue) + " ");
-      if (cur) {
-        j = 0;
-        while ((clazz = classes[j++])) {
-          //The real removing of the class happens here
-          // Remove *all* instances, since a single class might appear multiple times
-          while ((cur as string).indexOf(" " + clazz + " ") > -1) {
-            cur = (cur as string).replace(" " + clazz + " ", " ");
-          }
-        }
-        // Only assign if different to avoid unneeded rendering.
-        finalValue = utilsClass.stripAndCollapse(cur as string) as string;
-        if (curValue !== finalValue) {
-          element.setAttribute("class", finalValue);
-        }
-      }
-    }
-    return element;
-  }
-  //I borrowed this from Jquery
-  static addClass(element:Element, value:string):Element {
-    var classes, cur, curValue, clazz, j, finalValue;
-    //Turn the class I want to add to array
-    classes = utilsClass.classesToArray(value);
-    //If any class is returned
-    if (classes.length) {
-      //Get the classes this element has
-      curValue = utilsClass.getClass(element);
-      // This expression is here for better compressibility
-      //I also follow this documentation https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
-      //To ensire that its an Element Node been processed
-      // Then I strip off all excessive spaces between classes
-      cur = element.nodeType === 1 && (" " + utilsClass.stripAndCollapse(curValue) + " ");
-      if (cur) {
-        j = 0;
-        while ((clazz = classes[j++])) {
-          //Here is where the main addition of the class to the
-          //Former class pool happens
-          if ((cur as string).indexOf(" " + clazz + " ") < 0) {
-            cur += clazz + " ";
-          }
-        }
-        // Only assign if different to avoid unneeded rendering.
-        finalValue = utilsClass.stripAndCollapse(cur as string) as string;
-        if (curValue !== finalValue) {
-          element.setAttribute("class", finalValue);
-        }
-      }
-    }
-    return element;
-  }
-
-  static hasClass( element:Element,  value:string ):boolean {
-        var className: string;
-
-        className = " " + value + " ";
-        if ( element.nodeType === 1 &&
-                (" " + utilsClass.stripAndCollapse( utilsClass.getClass( element ) ) + " ")
-                       .indexOf( className ) > -1 ) {
-                    return true;
-           }
-
-        return false;
     }
 
 }

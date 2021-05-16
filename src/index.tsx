@@ -226,7 +226,8 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 
 			{
 				<TableTop style={styling?.top?.elements?.main ?? ""}>
-					<TableSearch onSearch={this.onSearch} style={styling?.top?.elements?.search ?? ""} />
+					{ this.props.show_search && 
+						<TableSearch onSearch={this.onSearch} style={styling?.top?.elements?.search ?? ""} />}
 					{
 						useBulk && this.isBulkSelected() ? <TableBulkAction action_options={this.props.bulk_select_options as string[]} 
 																			eventSelected={this.bulkActClick}

@@ -119,17 +119,17 @@ export function TableHead(props: Ithead) {
 			<th className={"text-base font-semibold text-gray-700 py-3.5 px-2 pl-4 "+props.data_style} >
 				{
 					all_is_checked && < CheckedBox onClick={() => props.mass_checking(page, 'uncheck-all')}
-						className="fill-current w-5 h-5 cursor-pointer" />
+						className="bulk-checkbox fill-current w-5 h-5 cursor-pointer" />
 				}
 
 				{
 					some_ischecked && < IndeterminateCheckBox onClick={() => props.mass_checking(page, 'check-all')}
-						className="fill-current w-5 h-5 cursor-pointer" />
+						className="bulk-checkbox indeterminate fill-current w-5 h-5 cursor-pointer" />
 				}
 
 				{
 					none_is_checked && < UnCheckedBox onClick={() => props.mass_checking(page, 'check-all')}
-						className="fill-current w-5 h-5 cursor-pointer" />
+						className="bulk-checkbox fill-current w-5 h-5 cursor-pointer" />
 				}
 			</th>
 		}
@@ -153,7 +153,7 @@ export function TableHead(props: Ithead) {
 
 export function TableCaption(props: { text: string, style:string }) {
 	return <div className={"flex mt-4 px-4 mb-1 text-base font-semibold tracking-wide leading-7 text-gray-700 "+ props.style}>
-		<h4 className=" ml-1 react-table-top">
+		<h4 className=" ml-1 react-table-top-caption">
 			{props.text}
 		</h4>
 	</div>
@@ -162,7 +162,7 @@ export function TableCaption(props: { text: string, style:string }) {
 
 export function TableSearch(props: { onSearch: (text: string) => void, style: string }) {
 
-	return <div className="relative flex items-center mt-3 md:mt-0">
+	return <div className="relative flex items-center mt-3 md:mt-0 table-top-search">
 		<input type="text" name="search"
 			className={`text-xs py-2 h-10 px-4 pl-6 w-52 md:w-auto focus:outline-none leading-9 tracking-wide 
 			text-gray-700 border border-gray-300 bg-gray-100 rounded-lg  `+ props.style}
@@ -184,8 +184,8 @@ interface IexportProps {
 	style: string
 }
 export function TableExport(props: IexportProps) {
-	return <div className={`flex items-center ${props.text_color} cursor-pointer order-first md:order-none self-end md:self-auto `+props.style}
-		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)} >
+	return <div className={`export-btn flex items-center ${props.text_color} cursor-pointer order-first md:order-none self-end md:self-auto `+props.style}
+		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)}  id="export-it">
 		<Import className="fill-current w-3 h-3 mr-2 " />
 		<p className="font-normal text-base">{props.export_text}</p>
 	</div>
@@ -234,7 +234,7 @@ export function TableBulkAction(props: ItableActProps) {
 		}
 	}
 
-	return <div className="flex items-center mt-3 md:mt-0">
+	return <div className="flex items-center mt-3 md:mt-0 bulk-select-dropdown">
 		<div className="w-52 md:w-48 relative mr-2 flex ">
 			<select
 				onChange={optionChange}
@@ -256,7 +256,7 @@ export function TableBulkAction(props: ItableActProps) {
 		</div>
 
 		<Button bg_color={props.bg_color} px="px-4" 
-				className={`${isNothing?'opacity-50':''} leading-4 `+props.button_style} 
+				className={`bulk-action-button ${isNothing?'opacity-50':''} leading-4 `+props.button_style} 
 				disabled={isNothing}
 				uppercase={false} 
 				onClick={takeAction} >{props.button_text}</Button>
@@ -316,7 +316,7 @@ export function Footer(props: Ifooter) {
 
 			<div className="flex rounded overflow-hidden border mt-2 md:mt-0 w-full md:w-auto">
 
-				<div className={`text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
+				<div className={`back-button text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
 							  ${paginated_map[active_page].back_button_clickable ?
 							  ' cursor-pointer ' : ' cursor-not-allowed '} 
 							  ${paginated_map[active_page].back_button_clickable ?'text-gray-700' : 'text-gray-400'} 
@@ -368,7 +368,7 @@ export function Footer(props: Ifooter) {
 
 
 
-				<div className={`text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
+				<div className={`next-button text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-r 
 							  ${paginated_map[active_page].forward_button_clickable ?
 							  ' cursor-pointer ' : ' cursor-not-allowed '} 
 							  ${paginated_map[active_page].forward_button_clickable ?'text-gray-700' : 'text-gray-400'} 

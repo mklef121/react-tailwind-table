@@ -1,15 +1,28 @@
 import React from 'react'
 import { render, unmountComponentAtNode } from 'react-dom'
 import Table from '../index'
-import { act } from 'react-dom/test-utils'
+import ReactTestUtils, { act } from 'react-dom/test-utils'
+import {row, col, full_table_styling} from "../../example/src/table-data"
 
-describe('Table Component', () => {
-  let containHolder = null
 
+// https://reactjs.org/docs/test-utils.html#simulate
+//Simulate functions gotten here
+
+let containHolder = null;
+let searchFunc = null;
+let downloadFunc = null;
+let tableBulkClick = null;
+
+describe('Table Component ', () => {
+  
   beforeEach(() => {
     // setup a DOM element as a render target
     containHolder = document.createElement('div')
     document.body.appendChild(containHolder)
+
+    searchFunc = jest.fn();
+    downloadFunc = jest.fn();
+    tableBulkClick = jest.fn((e) => console.log(e))
   })
 
   afterEach(() => {
@@ -17,36 +30,160 @@ describe('Table Component', () => {
     unmountComponentAtNode(containHolder)
     containHolder.remove()
     containHolder = null
+    searchFunc = null
+    downloadFunc = null
+    tableBulkClick = null
   })
 
-  it('Header Title Shows', () => {
+  test("Table Renders",() => {
+    
+    act(() =>{
+      render(table_component(), containHolder);
+    })
+
+    expect(containHolder.querySelector("table")).toBeInstanceOf(HTMLTableElement);
+  })
+
+
+  it('Hows Header Title', () => {
     act(() => {
       render(
-        <Table
-          columns={column()}
-          rows={fakePlayers()}
-          table_header='Test Table'
-          per_page={2}
-        />,
+        table_component(),
         containHolder
       )
     })
 
-    expect(containHolder.querySelector('#table-header').textContent).toBe(
-      'Test Table'
-    )
+    expect(containHolder.querySelector('.react-table-top-caption').textContent).toBe('My Table Is Good')
+  })
+
+  it('Shows Search Components', () => {
+    act(() => {
+      render(table_component(),containHolder)
+    })
+
+    expect(containHolder.querySelector('.table-top-search input')).toBeInstanceOf(HTMLInputElement);
+  })
+
+  test("Export function gets called when download button is clicked",() => {
+    // expect.assertions(1);
+    act(() =>{
+      render(table_component(), containHolder);
+    })
+    const downloadBtn = document.querySelector("div.export-btn");
+
+    expect(downloadFunc).not.toBeCalled();
+    act(() => {
+      ReactTestUtils.Simulate.click(downloadBtn);
+      
+    });
+    
+    expect(downloadFunc).toBeCalled();
+  })
+
+
+  describe("Table head tests", ()=>{
+
+    it("shows exact column as described it col prop",()=>{
+
+      act(()=>{
+        render(table_component([]), containHolder);
+      })
+
+     let res =  document.querySelectorAll("table thead tr th ");
+    //  console.log(res.length, col.filter((data => data.use_in_display !== false )).length,"true");
+     expect(col.filter((data => data.use_in_display !== false )).length).toBe(res.length)
+     
+    })
+
+    it("shows plus 1 column for table head due to bulk action option",()=>{
+
+      act(()=>{
+        render(table_component(), containHolder);
+      })
+
+     let res =  document.querySelectorAll("table thead tr th");
+     expect(col.filter((data => data.use_in_display !== false )).length + 1).toBe(res.length)
+     
+    })
+  })
+
+  describe("Bulk action api",() => {
+    test("Clicking on select all marks all child boxes",() => {
+      act(()=>{
+        render(table_component(), containHolder);
+      })
+
+      let bulkSelect =  document.querySelector("table thead tr th .bulk-checkbox");
+      let checkedInput = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+      expect(checkedInput.length).toBe(0);
+
+      act(()=>{
+        ReactTestUtils.Simulate.click(bulkSelect);
+      })
+      let checked = document.querySelectorAll('tbody input[type="checkbox"]:checked');
+      let allInputs = document.querySelectorAll('tbody input[type="checkbox"]');
+      
+      expect(checked.length).toBe(allInputs.length);
+    })
+
+    test("Checking few checboxes makes the interminate select all appear",() => {
+      act(()=>{
+        render(table_component(), containHolder);
+      })
+
+      let bulkSelect =  document.querySelector("table thead tr th .bulk-checkbox");
+      let indeterminate =  document.querySelector("table thead tr th .bulk-checkbox.indeterminate");
+      expect(indeterminate).toBe(null);
+
+      act(()=>{
+        ReactTestUtils.Simulate.click(bulkSelect);
+      })
+      let allInputs = document.querySelectorAll('tbody input[type="checkbox"]');
+
+      act(()=>{
+        ReactTestUtils.Simulate.change(allInputs[0],{target:{checked:false}});
+        // allInputs[0].checked = false;
+      })
+
+      act(()=>{
+        
+      })
+      
+      // console.log(allInputs[0]);
+      indeterminate =  document.querySelector("table thead tr th .bulk-checkbox.indeterminate");
+      
+      expect(indeterminate).toBeInstanceOf(SVGSVGElement);
+  
+    })
+
+    test("changing select option for bulk action and clicking on bulk action",() => {
+      act(()=>{
+        render(table_component(), containHolder);
+      })
+
+      let bulkSelect =  document.querySelector("table thead tr th .bulk-checkbox");
+
+      act(()=>{
+        ReactTestUtils.Simulate.click(bulkSelect);
+      })
+
+      let dropdown =  document.querySelector(".bulk-select-dropdown select");
+      
+      act(()=>{
+        //set the first as selected
+        dropdown.children[1].selected = true;
+      })
+
+      expect(dropdown.value).toBe("hello");
+    })
   })
 
   it('Number of Table Row <tr/> is equivalent to per_page props length', () => {
-    var page_num = 2
+    //As set in the table components
+    var page_num = 7
     act(() => {
       render(
-        <Table
-          columns={column()}
-          rows={fakePlayers()}
-          table_header='Test Table'
-          per_page={page_num}
-        />,
+        table_component(),
         containHolder
       )
     })
@@ -56,24 +193,19 @@ describe('Table Component', () => {
 
   it('NEXT page button Clicks', () => {
     var page_num = 2
-    act(() => {
-      render(
-        <Table
-          columns={column()}
-          rows={fakePlayers()}
-          table_header='Test Table'
-          per_page={page_num}
-        />,
-        containHolder
-      )
-    })
+     act(()=>{
+        render(table_component(), containHolder);
+      })
 
-    expect(containHolder.innerHTML).toContain('Sadio Mane')
+    //The first row object has this name
+    expect(containHolder.innerHTML).toContain('Miracle Nwabueze')
+
+
+    //This is the 8th object, and per page is 7
+    expect(containHolder.innerHTML).not.toContain("Oluebube Odogwu")
 
     var next_button = containHolder.querySelector('.next-button')
 
-    // .not.toContain toNotContain
-    expect(containHolder.innerHTML).not.toContain('Robertor Fermino')
     var clickEvent = document.createEvent('CustomEvent')
     clickEvent.initCustomEvent('click', true, true, null)
 
@@ -81,91 +213,26 @@ describe('Table Component', () => {
       next_button.dispatchEvent(clickEvent)
     })
 
-    expect(containHolder.innerHTML).toContain('Robertor Fermino')
+    expect(containHolder.innerHTML).toContain('Oluebube Odogwu')
+    expect(containHolder.innerHTML).not.toContain("Miracle Nwabueze")
   })
 })
 
-function column() {
-  return [
-    {
-      field: 'front_end_position.name',
-      use: 'Position'
-    },
-    {
-      // use_in_display: false,
-      field: 'name', // Object destructure
-      use: 'Name'
-    },
-
-    {
-      field: 'created_at',
-      use: 'Action'
-      // use_in_search:false
-    }
-  ]
+function table_component(bulk_actions=["hello","hi","cool"]){
+  return <Table columns={col} rows={row} 
+  per_page={7} table_header="My Table Is Good" 
+  bulk_select_options={bulk_actions}
+  show_search ={true}
+  // export_csv_file = "FuckThisShit"
+  on_bulk_action={tableBulkClick} 
+  // should_export={true}
+  on_search = {searchFunc}
+  export_modify={downloadFunc}
+  striped={true}
+  bordered={true}
+  hovered={true}
+  styling={full_table_styling}
+  // row_render ={this.rowcheck}
+  ></Table>
 }
 
-function fakePlayers() {
-  return [
-    {
-      id: 1,
-      name: 'Sadio Mane',
-      country_id: 3,
-      club_id: 2,
-      position_id: 1,
-      shirt_number: '10',
-      created_by: 2,
-      deleted_at: null,
-      created_at: '12/12/12 15:00:00',
-      updated_at: '12/12/12 15:00:00',
-      is_defender: false,
-      is_midfielder: false,
-      is_forward: true,
-      is_goalkeeper: false,
-      front_end_position: {
-        name: 'attach',
-        id: 2
-      }
-    },
-    {
-      id: 2,
-      name: 'Mohammed Sala',
-      country_id: 3,
-      club_id: 2,
-      position_id: 1,
-      shirt_number: '11',
-      created_by: 2,
-      deleted_at: null,
-      created_at: '12/12/12 15:00:00',
-      updated_at: '12/12/12 15:00:00',
-      is_defender: false,
-      is_midfielder: false,
-      is_forward: true,
-      is_goalkeeper: false,
-      front_end_position: {
-        name: 'Forward',
-        id: 4
-      }
-    },
-    {
-      id: 3,
-      name: 'Robertor Fermino',
-      country_id: 3,
-      club_id: 2,
-      position_id: 1,
-      shirt_number: '8',
-      created_by: 2,
-      deleted_at: null,
-      created_at: '12/12/12 15:00:00',
-      updated_at: '12/12/12 15:00:00',
-      is_defender: false,
-      is_midfielder: false,
-      is_forward: true,
-      is_goalkeeper: false,
-      front_end_position: {
-        name: 'Defence',
-        id: 9
-      }
-    }
-  ]
-}

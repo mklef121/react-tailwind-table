@@ -52,6 +52,7 @@ class App extends React.Component {
         on_bulk_action={tableBulkClick} 
         // should_export={true}
         on_search = {onSearch}
+        show_search = {true}
         // export_modify={exportModify}
         striped={true}
         bordered={true}
@@ -71,7 +72,7 @@ function tableBulkClick(option,value){
 
 
 function onSearch(text,values){
-  // console.log(text,values)
+  // console.log(text, "On search")
 }
 
 function exportModify(a,b,c){

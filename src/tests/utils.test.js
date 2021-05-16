@@ -1,4 +1,5 @@
-import utils from "../utilities/utils";
+import utils from "../utilsClass";
+import {row, col} from "../../example/src/table-data"
 
 
 describe('Testing Utils Functions', () => {
@@ -52,6 +53,60 @@ describe('Testing Utils Functions', () => {
 		});
 
 
+	})
+
+	describe("Trim functions test",()=>{
+
+		test("short trim removes only one occurence of word",()=>{
+			let word = " good man   ";
+			word = utils.trim(word," ","");
+
+			expect(word).toBe("good man   ")
+		})
+
+		test("left trim works as expected",()=>{
+			let word = " hi-man";
+			word = utils.ltrim(word,' ',"");
+
+			expect(word).toBe("hi-man")
+		})
+
+		test("right trim works as expected",()=>{
+			let word = "good man   ";
+			word = utils.rtrim(word," ","", true);
+
+			expect(word).toBe("good man")
+		})
+	})
+
+	test("test stringtoRegEx function",()=>{
+
+		let res = utils.stringtoRegEx("hi");
+
+		expect(res).toBeInstanceOf(RegExp);
+	})
+
+
+	describe("testing my filterFunction function",()=>{
+		it("returns a function", ()=>{
+			let ret = utils.filterFunction("Oluebube Odogwu",col);
+			expect(ret).toBeInstanceOf(Function)
+		})
+
+		it("returns true on correct search", ()=>{
+			let ret = utils.filterFunction("Oluebube Odogwu",col);
+			let isFound = row.filter(ret);
+
+			expect(isFound.length).toBe(1)
+		})
+
+		it("returns no result  on wrong search", ()=>{
+			let ret = utils.filterFunction("Dangbana Odogwu",col);
+			let isFound = row.filter(ret);
+
+			expect(isFound.length).toBe(0)
+		})
+		
 	})
 
 
@@ -232,7 +287,7 @@ describe('Testing Utils Functions', () => {
 		},
 		]
 		var b =[...a]; 
-		var start_time = (new Date()).getTime();
+		var start_time = performance.now();
 
 		//I made more copies and concatenation of the arrays , so as to increase
 		//The processing time
@@ -243,13 +298,13 @@ describe('Testing Utils Functions', () => {
 										   [...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,
 										    ...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c,...c]);
 
-		var end_time = (new Date()).getTime();
+		var end_time = performance.now();
 
 		var first_difference = end_time - start_time;
 
 		// expect(end_time - start_time).toBe(start_time+" - "+end_time);
 
-		var start_time = (new Date()).getTime();
+		var start_time = performance.now();
 
 		
 		//Array with THE SAME internal object reference
@@ -257,8 +312,8 @@ describe('Testing Utils Functions', () => {
 											...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a,...a], 
 										   [...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,
 										    ...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b,...b]);
-
-		var end_time = (new Date()).getTime();
+        // (new Date()).getTime()
+		var end_time = performance.now();
 
 		var second_difference = end_time - start_time;
 
@@ -266,11 +321,29 @@ describe('Testing Utils Functions', () => {
 		expect(result_1).toBe(result_2);
 
 		expect(first_difference).toBeGreaterThan(second_difference);
-
-
-
-
 	});
+
+	describe("Testing generateCSV function", ()=>{
+
+		test("It returns a promise", () =>{
+			const returned_value = utils.generateCSV(col,row);
+
+			expect(returned_value).toBeInstanceOf(Promise);
+		})
+
+		test("Returned value resolves to downloadable Blob", async () =>{
+			const returned_value = utils.generateCSV(col,row);
+
+			expect(await returned_value).toBeInstanceOf(Blob);
+		})
+
+		test("Modify function is called as expected", async () =>{
+			let mockCallback = jest.fn();
+			await utils.generateCSV(col,row, mockCallback);
+
+			expect(mockCallback.mock.calls.length).toBe(row.length * col.filter((data)=> data.use_in_export !== false).length );
+		})
+	})
 
 });
 
