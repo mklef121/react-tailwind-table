@@ -97,7 +97,7 @@ interface Iprop {
 	rows: Irow[],
 	columns: Icolumn[],
 	per_page?: number, 
-  table_header?: string,
+   table_header?: string,
 	no_content_text?: string, 
 	debounce_search?: number,
 	show_search?: boolean,
@@ -374,9 +374,12 @@ Quite a number of request came for this feature and I also saw the need to allow
 The table is broken down into 4 major sections which are
 
 * Table Top ![react-tailwind-table Table Top](resources/table-top.png)
+
 * Table Head ![react-tailwind-table Table Head](resources/table-head.png)
+
 * Table Body ![react-tailwind-table Table Body](resources/table-body.png)
-* Table Footer ![react-tailwind-table Table Head](resources/table-footerpng)
+
+* Table Footer ![react-tailwind-table Table Footer](resources/table-footer.png)
 
 To customize any section of this 4 parts, the `styling` props takes quite a large object that can help you customize fully.
 
