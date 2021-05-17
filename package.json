@@ -12,7 +12,7 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "NODE_ENV=production microbundle-crl --css-modules  false --no-compress --format modern,cjs",
+    "build": "NODE_ENV=production microbundle-crl --css-modules  false --format modern,cjs",
     "start": "microbundle-crl watch  --css-modules  false --no-compress --format modern,cjs",
     "prepublish": "run-s build",
     "test": "run-s test:unit test:build",
