@@ -145,7 +145,8 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 	}
 
 	private getTotalPages(): number {
-		return this.props.total_page_count ?? this.state.total_rows_count;
+		// return this.props.total_page_count ?? this.state.total_rows_count;
+		return this.state.total_rows_count;
 	}
 
 	private onPageChange = (page_number: number) => {
@@ -393,14 +394,14 @@ ReactTailwindTable.propTypes = {
 
 ReactTailwindTable.defaultProps = {
 	no_content_text: 'No Data Availaible',
-	per_page: 30,
+	per_page: 10,
 	debounce_search: 300,
 	show_search: true,
 	should_export: true,
 	bulk_select_options: [],
 	export_text: 'Export',
-	export_csv_file: "file_name",
-	bulk_select_button_text:"Pressure",
+	export_csv_file: "download",
+	bulk_select_button_text:"Apply",
 	striped: true,
 	bordered: true,
 	hovered:true,

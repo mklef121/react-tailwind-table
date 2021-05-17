@@ -1,10 +1,4 @@
 
-
-:root {
-    --brand-color: #CE5736;
-    --brand-soft-color: #FEFBF9;
-}
-/* ./src/index.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

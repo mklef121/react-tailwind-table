@@ -760,7 +760,7 @@ export const row = [
 ];
 
 
-const full_table_styling = {
+export const full_table_styling = {
   base_bg_color:"bg-green-600 base_bg_color_class",
   base_text_color:"text-green-600 base_text_color_class",
   top:{

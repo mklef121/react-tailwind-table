@@ -46,8 +46,8 @@ class App extends React.Component {
     return(
       <div style={{padding:"20px"}}>
         <Table columns={col} rows={row} 
-        per_page={7} table_header="My Table Is Good" 
-        bulk_select_options={["hello","hi","cool"]} 
+        per_page={5} table_header="My Table Is Good" 
+        bulk_select_options={["Save","Delete","Update"]} 
         // export_csv_file = "FuckThisShit"
         on_bulk_action={tableBulkClick} 
         // should_export={true}
@@ -59,6 +59,7 @@ class App extends React.Component {
         hovered={true}
         styling={tableStyling}
         row_render ={this.rowcheck}
+        // bulk_select_button_text="Apply"
         ></Table>
       </div>
     ) 
