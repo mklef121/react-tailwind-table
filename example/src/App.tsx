@@ -1,20 +1,22 @@
 import React from 'react'
 
-import Table from 'react-tailwind-table'
+import Table, { Irow } from 'react-tailwind-table'
 import 'react-tailwind-table/dist/index.css'
+// import { Irow } from '../../dist/src/table-types';
+// import { Irow } from 'react-tailwind-table';
 import {row,col} from "./table-data";
 
 
 class App extends React.Component {
 
-  constructor(props) {
-    super(props)
+  // constructor(props) {
+  //   super(props)
 
-    // this.state={
-    //   columns:column(),
-    //   rows: fakePlayers()
-    // }
-  }
+  //   // this.state={
+  //   //   columns:column(),
+  //   //   rows: fakePlayers()
+  //   // }
+  // }
 
   componentDidMount(){
 
@@ -34,7 +36,7 @@ class App extends React.Component {
     //   }, 15000);
   }
 
-  rowcheck = (row,column, display_text) => {
+  rowcheck = (row: any,column: any, display_text: string) => {
 
     if (column.field === "action") {
       return <button className="border border-gray-100 p-2 bg-blue-500 text-white rounded-md">Save Player</button>
@@ -67,16 +69,16 @@ class App extends React.Component {
   }
 }
 
-function tableBulkClick(option,value){
+function tableBulkClick(option: string,value:Irow[]){
   // console.log(option,value)
 }
 
 
-function onSearch(text,values){
+function onSearch(text:any,values:any){
   // console.log(text, "On search")
 }
 
-function exportModify(a,b,c){
+function exportModify(a:any,b:any,c:any){
   // console.log(a,b,c)
 
   return "Fool"
@@ -84,8 +86,8 @@ function exportModify(a,b,c){
 
 
 const tableStyling = {
-  // base_bg_color:"bg-green-600",
-  // base_text_color:"text-green-600",
+  base_bg_color:"bg-green-600",
+  base_text_color:"text-green-600",
   top:{
     // title:"text-red-700"
     elements: {

@@ -64,13 +64,13 @@ A tailwind project would just need to import the react component using `import T
 
 ### None Tailwind Project
 None tailwind users can import this component in any react project of choice, no matter if they are using a css library or not. This can easily be achieved with two lines of code.
-`import Table from 'react-tailwind-table'` and `import 'react-tailwind-table/index.css'`
+`import Table from 'react-tailwind-table'` and `import 'react-tailwind-table/dist/index.css'`
 
 ```tsx
 import React, { Component } from 'react'
 
 import Table from 'react-tailwind-table';
-import 'react-tailwind-table/index.css';
+import 'react-tailwind-table/dist/index.css';
 
 class Example extends Component {
   render() {
@@ -430,7 +430,7 @@ interface ItableStyle {
 
 import React from 'react'
 import Table from 'react-tailwind-table'
-import 'react-tailwind-table/index.css' //use for a non tailwind project
+import 'react-tailwind-table/dist/index.css' //use for a non tailwind project
 
 
 class App extends React.Component {

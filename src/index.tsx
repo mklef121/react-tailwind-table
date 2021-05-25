@@ -7,8 +7,8 @@ import {
 	TableHead, TableRow, TableSearch, TableTop
 } from "./table-sub-components";
 import "./css/tailwind.css";
+export * from "./table-types";
 
-// bulk_action_options
 export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 
 	static propTypes: {};
