@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    branches: [master]
+
+# Never run two releases at the same time
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: write       # push the version bump commit, tags and GitHub releases
+  issues: write         # comment on issues fixed by a release
+  pull-requests: write  # comment on pull requests included in a release
+  id-token: write       # npm trusted publishing (no npm token needed)
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # semantic-release needs the full history and tags
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm test
+
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
