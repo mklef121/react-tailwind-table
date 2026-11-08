@@ -22,6 +22,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # semantic-release needs the full history and tags
+          ssh-key: ${{ secrets.DEPLOY_KEY }}  # deploy key can bypass the master ruleset to push the version bump
 
       - uses: actions/setup-node@v4
         with:
