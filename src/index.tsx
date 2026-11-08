@@ -361,7 +361,7 @@ ReactTailwindTable.propTypes = {
 	on_search: PropTypes.func,
 	on_bulk_action: PropTypes.func,
 
-	no_content_text: PropTypes.string,
+	no_content_text: PropTypes.node,
 	table_header: PropTypes.string,
 	export_text: PropTypes.string,
 	bulk_select_options: PropTypes.arrayOf(PropTypes.string),

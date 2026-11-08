@@ -81,6 +81,36 @@ describe('Table Component ', () => {
   })
 
 
+  describe("No content text", () => {
+    it("shows the default text when there are no rows", () => {
+      act(() => {
+        render(<Table columns={col} rows={[]} />, containHolder)
+      })
+      expect(containHolder.querySelector("tbody").textContent).toBe("No Data Availaible")
+    })
+
+    it("accepts a string", () => {
+      act(() => {
+        render(<Table columns={col} rows={[]} no_content_text="Nothing here" />, containHolder)
+      })
+      expect(containHolder.querySelector("tbody").textContent).toBe("Nothing here")
+    })
+
+    it("accepts a React element without a prop-type warning", () => {
+      const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+      act(() => {
+        render(
+          <Table columns={col} rows={[]} no_content_text={<span className="custom-empty">Custom empty</span>} />,
+          containHolder
+        )
+      })
+      expect(containHolder.querySelector("tbody .custom-empty").textContent).toBe("Custom empty")
+      const propTypeWarnings = errorSpy.mock.calls.filter(args => args.join(" ").includes("no_content_text"))
+      expect(propTypeWarnings).toHaveLength(0)
+      errorSpy.mockRestore()
+    })
+  })
+
   describe("Table head tests", ()=>{
 
     it("shows exact column as described it col prop",()=>{
