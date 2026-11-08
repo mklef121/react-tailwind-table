@@ -264,7 +264,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 						data_style={styling?.table_head?.table_data ?? ""} />
 				</thead>
 
-				<tbody className={"text-sm font-normal text-gray-700 "+styling?.table_body?.main??""}>
+				<tbody className={"text-sm font-normal text-gray-700 " + (styling?.table_body?.main ?? "")}>
 					{
 						(this.state.active_rows.length > 0 &&
 							(this.state.active_rows as Irow[]).map((row: Irow, index: number) =>

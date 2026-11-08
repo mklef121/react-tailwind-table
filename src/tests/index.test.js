@@ -44,6 +44,18 @@ describe('Table Component ', () => {
     expect(containHolder.querySelector("table")).toBeInstanceOf(HTMLTableElement);
   })
 
+  test("tbody gets the user's class and no stray 'undefined' class", () => {
+    act(() => {
+      render(<Table columns={col} rows={row} />, containHolder)
+    })
+    expect(containHolder.querySelector("tbody").classList.contains("undefined")).toBe(false)
+
+    act(() => {
+      render(<Table columns={col} rows={row} styling={{ table_body: { main: "my-body" } }} />, containHolder)
+    })
+    expect(containHolder.querySelector("tbody").classList.contains("my-body")).toBe(true)
+  })
+
 
   it('Hows Header Title', () => {
     act(() => {
