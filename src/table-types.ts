@@ -56,7 +56,33 @@ export interface Iprop {
 	
 	on_bulk_action?: (selected_option: string, selected: Irow[]) => void,
 
+	/**
+	 * Placeholder of the search input. Defaults to "SEARCH"
+	 */
+	search_placeholder?: string,
+	/**
+	 * First (empty) option of the bulk action dropdown. Defaults to "Select ..."
+	 */
+	bulk_select_placeholder?: string,
+	/**
+	 * Renders the footer statistics text. Defaults to "Showing {from} to {to} of {total} entries"
+	 */
+	pagination_info?: (info: IpaginationInfo) => ReactNode,
+	/**
+	 * Text direction of the table. When not set, the direction is inherited from the page (e.g `<html dir="rtl">`)
+	 */
+	dir?: 'ltr' | 'rtl' | 'auto',
+
 	styling ?: ItableStyle
+}
+
+export interface IpaginationInfo {
+	/** 1-based index of the first row shown on the current page */
+	from: number,
+	/** 1-based index of the last row shown on the current page */
+	to: number,
+	/** Total number of rows (after search filtering) */
+	total: number
 }
 
 export interface ItableStyle {

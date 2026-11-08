@@ -16,6 +16,7 @@ A few features that comes with this table include
 - 5)  Bulk Item Action
 - 6)  Customizable table data display
 - 7)  Full custom styling
+- 8)  Translatable texts and RTL support
 
 
 > Contents
@@ -45,6 +46,8 @@ A few features that comes with this table include
     - [Striped Table](#striped-table)
     - [Hover Indicator](#hover-indicator)
     - [Table With and Without Borders](#table-with-and-without-borders)
+    - [Translation](#translation)
+    - [RTL Support](#rtl-support)
   - [Customization and Custom Styling](#customization-and-custom-styling)
   - [Using In Your Component](#using-in-your-component)
 - [Looks and Feel](#looks-and-feel)
@@ -114,6 +117,11 @@ interface Iprop {
 	on_search?: (search_word: string, result?: Irow[] | []) => void,
 	export_modify?: (row: Irow, col: Icolumn, display_value: string) => string,
 	on_bulk_action?: (selected_option: string, selected: Irow[]) => void,
+
+	search_placeholder?: string,
+	bulk_select_placeholder?: string,
+	pagination_info?: (info: { from: number, to: number, total: number }) => React.ReactNode,
+	dir?: 'ltr' | 'rtl' | 'auto',
 
   //This will be discussed properly in the course of the documentation
 	styling ?: ItableStyle
@@ -370,6 +378,55 @@ A `bg-gray-50` color can be applied on a row when the mouse hovered over it. Con
 ### Table With and Without Borders
 
 The borders of a the table can be controlled with the `bordered` prop. 
+
+
+### Translation
+
+Every text shown by the table can be changed, so the table can be used in any language.
+
+| Prop | Default | Where it shows |
+| --- | --- | --- |
+| `search_placeholder` | `SEARCH` | Placeholder of the search input |
+| `bulk_select_placeholder` | `Select ...` | First option of the bulk action dropdown |
+| `bulk_select_button_text` | `Apply` | Bulk action button |
+| `export_text` | `Export` | CSV export button |
+| `no_content_text` | `No Data Availaible` | Shown when there are no rows |
+| `pagination_info` | `Showing {from} to {to} of {total} entries` | Footer statistics |
+
+`pagination_info` is a function, because word order differs between languages. It receives the numbers of the current page and returns what should be displayed (a string or any React node):
+
+```jsx
+<Table
+  columns={columns}
+  rows={rows}
+  search_placeholder="Rechercher"
+  bulk_select_placeholder="Choisir ..."
+  bulk_select_button_text="Appliquer"
+  export_text="Exporter"
+  no_content_text="Aucune donnée"
+  pagination_info={({ from, to, total }) => <>Affichage de <b>{from}</b> à <b>{to}</b> sur <b>{total}</b> entrées</>}
+/>
+```
+
+When `pagination_info` is used, the `styling.footer.statistics.bold_numbers` classes are not applied, since you control the markup.
+
+
+### RTL Support
+
+The table supports right-to-left languages such as Arabic and Hebrew. The layout (columns, padding, search icon, pagination arrows, etc.) follows the text direction:
+
+- If your page already sets the direction, e.g. `<html dir="rtl">`, the table follows it automatically.
+- To set the direction of a single table, use the `dir` prop: `'ltr'`, `'rtl'` or `'auto'`.
+
+```jsx
+<Table
+  dir="rtl"
+  columns={columns}
+  rows={rows}
+  search_placeholder="חיפוש"
+  pagination_info={({ from, to, total }) => `מציג ${from} עד ${to} מתוך ${total} רשומות`}
+/>
+```
 
 
 

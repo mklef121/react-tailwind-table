@@ -44,6 +44,18 @@ describe('Table Component ', () => {
     expect(containHolder.querySelector("table")).toBeInstanceOf(HTMLTableElement);
   })
 
+  test("tbody gets the user's class and no stray 'undefined' class", () => {
+    act(() => {
+      render(<Table columns={col} rows={row} />, containHolder)
+    })
+    expect(containHolder.querySelector("tbody").classList.contains("undefined")).toBe(false)
+
+    act(() => {
+      render(<Table columns={col} rows={row} styling={{ table_body: { main: "my-body" } }} />, containHolder)
+    })
+    expect(containHolder.querySelector("tbody").classList.contains("my-body")).toBe(true)
+  })
+
 
   it('Hows Header Title', () => {
     act(() => {
@@ -64,20 +76,71 @@ describe('Table Component ', () => {
     expect(containHolder.querySelector('.table-top-search input')).toBeInstanceOf(HTMLInputElement);
   })
 
-  test("Export function gets called when download button is clicked",() => {
-    // expect.assertions(1);
-    act(() =>{
-      render(table_component(), containHolder);
-    })
-    const downloadBtn = document.querySelector("div.export-btn");
+  describe("CSV export", () => {
+    // jsdom does not implement URL.createObjectURL / revokeObjectURL, so they are mocked here.
+    // Clicking the generated <a> is mocked too, since jsdom does not implement navigation.
+    const originalCreateObjectURL = window.URL.createObjectURL
+    const originalRevokeObjectURL = window.URL.revokeObjectURL
+    let anchorClick = null
 
-    expect(downloadFunc).not.toBeCalled();
-    act(() => {
-      ReactTestUtils.Simulate.click(downloadBtn);
-      
-    });
-    
-    expect(downloadFunc).toBeCalled();
+    const clickExport = async () => {
+      await act(async () => {
+        ReactTestUtils.Simulate.click(document.querySelector("div.export-btn"))
+        // let the async CSV generation and download finish
+        await new Promise((resolve) => setTimeout(resolve, 0))
+      })
+    }
+
+    beforeEach(() => {
+      window.URL.createObjectURL = jest.fn(() => "blob:csv-file")
+      window.URL.revokeObjectURL = jest.fn()
+      anchorClick = jest.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      window.URL.createObjectURL = originalCreateObjectURL
+      window.URL.revokeObjectURL = originalRevokeObjectURL
+      anchorClick.mockRestore()
+    })
+
+    test("Export function gets called when download button is clicked", async () => {
+      act(() => {
+        render(table_component(), containHolder)
+      })
+
+      expect(downloadFunc).not.toBeCalled()
+      await clickExport()
+      expect(downloadFunc).toBeCalled()
+    })
+
+    test("downloads the CSV through a temporary link", async () => {
+      act(() => {
+        render(table_component(), containHolder)
+      })
+
+      await clickExport()
+
+      expect(window.URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob))
+      expect(anchorClick).toHaveBeenCalledTimes(1)
+      const link = anchorClick.mock.instances[0]
+      expect(link.getAttribute("href")).toBe("blob:csv-file")
+      expect(link.getAttribute("download")).toBe("download.csv")
+      expect(window.URL.revokeObjectURL).toHaveBeenCalledWith("blob:csv-file")
+      expect(document.body.contains(link)).toBe(false)
+    })
+
+    test("a failed export is logged instead of becoming an unhandled rejection", async () => {
+      const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+      window.URL.createObjectURL = jest.fn(() => { throw new Error("blocked") })
+      act(() => {
+        render(table_component(), containHolder)
+      })
+
+      await clickExport()
+
+      expect(errorSpy).toHaveBeenCalledWith("react-tailwind-table: CSV export failed.", expect.any(Error))
+      errorSpy.mockRestore()
+    })
   })
 
 
@@ -108,6 +171,57 @@ describe('Table Component ', () => {
       const propTypeWarnings = errorSpy.mock.calls.filter(args => args.join(" ").includes("no_content_text"))
       expect(propTypeWarnings).toHaveLength(0)
       errorSpy.mockRestore()
+    })
+  })
+
+  describe("Translations and RTL", () => {
+    const people = Array.from({ length: 12 }, (_, i) => ({ name: "Person " + i, age: 20 + i }))
+    const people_cols = [{ field: "name", use: "Name" }, { field: "age", use: "Age" }]
+    const checkFirstRow = () => {
+      const box = containHolder.querySelector("tbody input[type=checkbox]")
+      act(() => {
+        ReactTestUtils.Simulate.change(box, { target: { checked: true } })
+      })
+    }
+
+    it("keeps the English defaults", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} per_page={5} bulk_select_options={["delete"]} />, containHolder)
+      })
+      checkFirstRow()
+      expect(containHolder.querySelector(".table-top-search input").getAttribute("placeholder")).toBe("SEARCH")
+      expect(containHolder.querySelector(".bulk-select-dropdown option").textContent).toBe("Select ...")
+      expect(containHolder.textContent.replace(/\s+/g, " ")).toContain("Showing 1 to 5 of 12 entries")
+      expect(containHolder.firstChild.hasAttribute("dir")).toBe(false)
+    })
+
+    it("translates the search, bulk select and footer texts", () => {
+      const pagination_info = jest.fn(({ from, to, total }) => <span className="info">{`${from}-${to} מתוך ${total}`}</span>)
+      act(() => {
+        render(
+          <Table columns={people_cols} rows={people} per_page={5} bulk_select_options={["delete"]}
+            search_placeholder="חיפוש" bulk_select_placeholder="בחר ..." pagination_info={pagination_info} />,
+          containHolder
+        )
+      })
+      checkFirstRow()
+      expect(containHolder.querySelector(".table-top-search input").getAttribute("placeholder")).toBe("חיפוש")
+      expect(containHolder.querySelector(".bulk-select-dropdown option").textContent).toBe("בחר ...")
+      expect(pagination_info).toHaveBeenLastCalledWith({ from: 1, to: 5, total: 12 })
+      expect(containHolder.querySelector(".info").textContent).toBe("1-5 מתוך 12")
+      expect(containHolder.textContent).not.toContain("Showing")
+
+      act(() => {
+        ReactTestUtils.Simulate.click(containHolder.querySelector(".next-button"))
+      })
+      expect(pagination_info).toHaveBeenLastCalledWith({ from: 6, to: 10, total: 12 })
+    })
+
+    it("sets the dir attribute on the table container", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} dir="rtl" />, containHolder)
+      })
+      expect(containHolder.firstChild.getAttribute("dir")).toBe("rtl")
     })
   })
 

@@ -1,6 +1,6 @@
 {
   "name": "react-tailwind-table",
-  "version": "0.0.0-development",
+  "version": "1.2.0",
   "description": "A Responsive Table component Made with React js and Tailwind Css. Has Pagination and search ability.",
   "author": "mklef121",
   "license": "MIT",
@@ -13,11 +13,11 @@
     "node": ">=10"
   },
   "scripts": {
-    "build": "NODE_ENV=production microbundle-crl --css-modules  false --format modern,cjs",
-    "start": "microbundle-crl watch  --css-modules  false --no-compress --format modern,cjs",
-    "prepublish": "run-s build",
-    "test": "run-s test:unit test:build",
-    "test:build": "run-s build",
+    "build": "cross-env NODE_ENV=production microbundle-crl --css-modules false --format modern,cjs",
+    "start": "microbundle-crl watch --css-modules false --no-compress --format modern,cjs",
+    "prepublishOnly": "npm run build",
+    "test": "npm run test:unit && npm run test:build",
+    "test:build": "npm run build",
     "test:lint": "eslint . --fix",
     "test:unit": "cross-env CI=1 react-scripts test --env=jsdom --coverage=true",
     "test:watch": "react-scripts test --env=jsdom",
@@ -51,7 +51,6 @@
     "gh-pages": "^2.2.0",
     "microbundle-crl": "^0.13.10",
     "nan": "^2.14.1",
-    "npm-run-all": "^4.1.5",
     "postcss": "^7.0.35",
     "postcss-cli": "^7.1.1",
     "prettier": "^2.0.4",
@@ -64,6 +63,5 @@
   },
   "files": [
     "dist"
-  ],
-  "dependencies": {}
+  ]
 }

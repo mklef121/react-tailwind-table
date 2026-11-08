@@ -220,7 +220,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 		//Also don't show the bulk select if then user did not send in an array of `bulk_select_options` props
 		const useBulk = this.state.page_number_list.length < 1 ?
 			false : (this.props.bulk_select_options as string[]).length > 0 ? true : false
-		return <div className={`bg-white w-full flex flex-col pb-5 ${styling.main ?? ''}`} style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
+		return <div dir={this.props.dir} className={`bg-white w-full flex flex-col pb-5 ${styling.main ?? ''}`} style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
 			{/* Table Caption*/
 				this.props.table_header && <TableCaption text={this.props.table_header} style={styling?.top?.title ?? ""} />
 			}
@@ -228,11 +228,13 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 			{
 				<TableTop style={styling?.top?.elements?.main ?? ""}>
 					{ this.props.show_search && 
-						<TableSearch onSearch={this.onSearch} style={styling?.top?.elements?.search ?? ""} />}
+						<TableSearch onSearch={this.onSearch} placeholder={this.props.search_placeholder as string}
+										 style={styling?.top?.elements?.search ?? ""} />}
 					{
 						useBulk && this.isBulkSelected() ? <TableBulkAction action_options={this.props.bulk_select_options as string[]} 
 																			eventSelected={this.bulkActClick}
 																			button_text={this.props.bulk_select_button_text as string}
+																			placeholder={this.props.bulk_select_placeholder as string}
 																			bg_color={styling.base_bg_color as string}
 																			dropdown_style={styling?.top?.elements?.bulk_select?.main ?? ""}
 																			button_style ={styling?.top?.elements?.bulk_select?.button ?? ""} />
@@ -262,7 +264,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 						data_style={styling?.table_head?.table_data ?? ""} />
 				</thead>
 
-				<tbody className={"text-sm font-normal text-gray-700 "+styling?.table_body?.main??""}>
+				<tbody className={"text-sm font-normal text-gray-700 " + (styling?.table_body?.main ?? "")}>
 					{
 						(this.state.active_rows.length > 0 &&
 							(this.state.active_rows as Irow[]).map((row: Irow, index: number) =>
@@ -294,6 +296,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 				paginated_map={this.state.paginated_map}
 				active_page={this.state.active_page_number}
 				total_pages={this.getTotalPages()}
+				pagination_info={this.props.pagination_info}
 				onPageChange={this.onPageChange}
 				bg_color={styling.base_bg_color as string}
 				main_style = {styling?.footer?.main ?? ""} 
@@ -360,10 +363,14 @@ ReactTailwindTable.propTypes = {
 	export_modify: PropTypes.func,
 	on_search: PropTypes.func,
 	on_bulk_action: PropTypes.func,
+	pagination_info: PropTypes.func,
 
 	no_content_text: PropTypes.node,
 	table_header: PropTypes.string,
 	export_text: PropTypes.string,
+	search_placeholder: PropTypes.string,
+	bulk_select_placeholder: PropTypes.string,
+	dir: PropTypes.oneOf(['ltr', 'rtl', 'auto']),
 	bulk_select_options: PropTypes.arrayOf(PropTypes.string),
 	striped: PropTypes.bool,
 	bordered: PropTypes.bool,
@@ -402,6 +409,8 @@ ReactTailwindTable.defaultProps = {
 	export_text: 'Export',
 	export_csv_file: "download",
 	bulk_select_button_text:"Apply",
+	search_placeholder: "SEARCH",
+	bulk_select_placeholder: "Select ...",
 	striped: true,
 	bordered: true,
 	hovered:true,
