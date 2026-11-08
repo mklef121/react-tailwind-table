@@ -281,7 +281,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 									data_style={styling?.table_body?.table_data ?? ""} />
 							)) ||
 
-						<tr className="hover:bg-table-col bg-table-col border-b border-gray-200 ">
+						<tr className="bg-gray-50 border-b border-gray-200 ">
 							<td className="px-4 py-4 text-center"
 								colSpan={display_columns.length} >
 

@@ -8,7 +8,6 @@
  * They follow the text direction: "start" is the left side in LTR and the right side in RTL.
  */
 @layer utilities {
-	.text-start { text-align: start; }
 	.ps-4 { padding-inline-start: 1rem; }
 	.ps-6 { padding-inline-start: 1.5rem; }
 	.pe-4 { padding-inline-end: 1rem; }
@@ -21,13 +20,10 @@
 }
 
 /*
- * Browsers center <th> unless the row's text-align differs from the default ("start"),
- * so header cells would ignore the row's text-start. :where() keeps specificity at zero,
- * so alignment classes passed through `styling` still win.
+ * The `rtl:` variant does not exist in Tailwind v2, so the rtl: classes used by the table are defined here.
+ * They use the same class names and selector as Tailwind v3/v4, so Tailwind projects that scan this package
+ * generate them on their own.
  */
-:where(.rtt-head-row > th) { text-align: inherit; }
-
-/* Pagination arrows point the other way in RTL */
-.rtt-arrow-back { transform: scaleX(-1); }
-.rtt-arrow-back:dir(rtl) { transform: none; }
-.rtt-arrow-next:dir(rtl) { transform: scaleX(-1); }
+[dir="rtl"] .rtl\:text-right { text-align: right; }
+[dir="rtl"] .rtl\:rotate-0 { --tw-rotate: 0deg; }
+[dir="rtl"] .rtl\:rotate-180 { --tw-rotate: 180deg; }
