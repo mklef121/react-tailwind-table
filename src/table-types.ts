@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export interface Icolumn {
 	field: string, //This field can have a full stop(.) will allow us to read further into objects
 	use?: string, //This will be used to display in the table heading
@@ -29,7 +31,7 @@ export interface Iprop {
 	rows: Irow[],
 	columns: Icolumn[],
 	per_page?: number,
-	no_content_text?: string,
+	no_content_text?: ReactNode,
 	debounce_search?: number,
 	table_header?: string,
 	show_search?: boolean,

@@ -98,7 +98,7 @@ interface Iprop {
 	columns: Icolumn[],
 	per_page?: number, 
    table_header?: string,
-	no_content_text?: string, 
+	no_content_text?: React.ReactNode, 
 	debounce_search?: number,
 	show_search?: boolean,
 	should_export?: boolean,
@@ -298,7 +298,13 @@ type searchCallback = (search_word: string, result?: Irow[] | []) => void
 
 ### No Content Message
 
-When there is no data to display (rows props is empty), the `No Data Availaible` text is shown. The `no_content_text` props controls the text.
+When there is no data to display (rows props is empty), the `No Data Availaible` text is shown. The `no_content_text` prop controls what is shown. It accepts anything React can render: a string, a number, or a React element such as a component:
+
+```jsx
+<Table columns={columns} rows={[]} no_content_text="Nothing to see here" />
+
+<Table columns={columns} rows={[]} no_content_text={<EmptyState />} />
+```
 
 
 ### Hide Search
