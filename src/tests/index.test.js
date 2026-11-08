@@ -88,6 +88,7 @@ describe('Table Component ', () => {
         ReactTestUtils.Simulate.click(document.querySelector("div.export-btn"))
         // let the async CSV generation and download finish
         await new Promise((resolve) => setTimeout(resolve, 0))
+        await new Promise((resolve) => setTimeout(resolve, 0)) // runs after the download's cleanup timer
       })
     }
 
