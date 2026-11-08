@@ -1,5 +1,33 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Logical (start/end) utilities used for RTL support.
+ * Tailwind v2 has no equivalent, so they are defined here with the same names Tailwind v3.3+ uses.
+ * They follow the text direction: "start" is the left side in LTR and the right side in RTL.
+ */
+@layer utilities {
+	.text-start { text-align: start; }
+	.ps-4 { padding-inline-start: 1rem; }
+	.ps-6 { padding-inline-start: 1.5rem; }
+	.pe-4 { padding-inline-end: 1rem; }
+	.pe-8 { padding-inline-end: 2rem; }
+	.ms-1 { margin-inline-start: 0.25rem; }
+	.ms-2 { margin-inline-start: 0.5rem; }
+	.me-2 { margin-inline-end: 0.5rem; }
+	.end-0 { inset-inline-end: 0px; }
+	.border-e { border-inline-end-width: 1px; }
+}
+
+/*
+ * Browsers center <th> unless the row's text-align differs from the default ("start"),
+ * so header cells would ignore the row's text-start. :where() keeps specificity at zero,
+ * so alignment classes passed through `styling` still win.
+ */
+:where(.rtt-head-row > th) { text-align: inherit; }
+
+/* Pagination arrows point the other way in RTL */
+.rtt-arrow-back { transform: scaleX(-1); }
+.rtt-arrow-back:dir(rtl) { transform: none; }
+.rtt-arrow-next:dir(rtl) { transform: scaleX(-1); }

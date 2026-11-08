@@ -111,6 +111,57 @@ describe('Table Component ', () => {
     })
   })
 
+  describe("Translations and RTL", () => {
+    const people = Array.from({ length: 12 }, (_, i) => ({ name: "Person " + i, age: 20 + i }))
+    const people_cols = [{ field: "name", use: "Name" }, { field: "age", use: "Age" }]
+    const checkFirstRow = () => {
+      const box = containHolder.querySelector("tbody input[type=checkbox]")
+      act(() => {
+        ReactTestUtils.Simulate.change(box, { target: { checked: true } })
+      })
+    }
+
+    it("keeps the English defaults", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} per_page={5} bulk_select_options={["delete"]} />, containHolder)
+      })
+      checkFirstRow()
+      expect(containHolder.querySelector(".table-top-search input").getAttribute("placeholder")).toBe("SEARCH")
+      expect(containHolder.querySelector(".bulk-select-dropdown option").textContent).toBe("Select ...")
+      expect(containHolder.textContent.replace(/\s+/g, " ")).toContain("Showing 1 to 5 of 12 entries")
+      expect(containHolder.firstChild.hasAttribute("dir")).toBe(false)
+    })
+
+    it("translates the search, bulk select and footer texts", () => {
+      const pagination_info = jest.fn(({ from, to, total }) => <span className="info">{`${from}-${to} מתוך ${total}`}</span>)
+      act(() => {
+        render(
+          <Table columns={people_cols} rows={people} per_page={5} bulk_select_options={["delete"]}
+            search_placeholder="חיפוש" bulk_select_placeholder="בחר ..." pagination_info={pagination_info} />,
+          containHolder
+        )
+      })
+      checkFirstRow()
+      expect(containHolder.querySelector(".table-top-search input").getAttribute("placeholder")).toBe("חיפוש")
+      expect(containHolder.querySelector(".bulk-select-dropdown option").textContent).toBe("בחר ...")
+      expect(pagination_info).toHaveBeenLastCalledWith({ from: 1, to: 5, total: 12 })
+      expect(containHolder.querySelector(".info").textContent).toBe("1-5 מתוך 12")
+      expect(containHolder.textContent).not.toContain("Showing")
+
+      act(() => {
+        ReactTestUtils.Simulate.click(containHolder.querySelector(".next-button"))
+      })
+      expect(pagination_info).toHaveBeenLastCalledWith({ from: 6, to: 10, total: 12 })
+    })
+
+    it("sets the dir attribute on the table container", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} dir="rtl" />, containHolder)
+      })
+      expect(containHolder.firstChild.getAttribute("dir")).toBe("rtl")
+    })
+  })
+
   describe("Table head tests", ()=>{
 
     it("shows exact column as described it col prop",()=>{
