@@ -185,7 +185,8 @@ interface IexportProps {
 }
 export function TableExport(props: IexportProps) {
 	return <div className={`export-btn flex items-center ${props.text_color} cursor-pointer order-first md:order-none self-end md:self-auto `+props.style}
-		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)}  id="export-it">
+		onClick={() => processDownload(props.paginated_data, props.cols,props.file_name, props.processFunc)
+							.catch((error) => console.error("react-tailwind-table: CSV export failed.", error))}  id="export-it">
 		<Import className="fill-current w-3 h-3 me-2 " />
 		<p className="font-normal text-base">{props.export_text}</p>
 	</div>

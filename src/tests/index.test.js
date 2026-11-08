@@ -64,20 +64,71 @@ describe('Table Component ', () => {
     expect(containHolder.querySelector('.table-top-search input')).toBeInstanceOf(HTMLInputElement);
   })
 
-  test("Export function gets called when download button is clicked",() => {
-    // expect.assertions(1);
-    act(() =>{
-      render(table_component(), containHolder);
-    })
-    const downloadBtn = document.querySelector("div.export-btn");
+  describe("CSV export", () => {
+    // jsdom does not implement URL.createObjectURL / revokeObjectURL, so they are mocked here.
+    // Clicking the generated <a> is mocked too, since jsdom does not implement navigation.
+    const originalCreateObjectURL = window.URL.createObjectURL
+    const originalRevokeObjectURL = window.URL.revokeObjectURL
+    let anchorClick = null
 
-    expect(downloadFunc).not.toBeCalled();
-    act(() => {
-      ReactTestUtils.Simulate.click(downloadBtn);
-      
-    });
-    
-    expect(downloadFunc).toBeCalled();
+    const clickExport = async () => {
+      await act(async () => {
+        ReactTestUtils.Simulate.click(document.querySelector("div.export-btn"))
+        // let the async CSV generation and download finish
+        await new Promise((resolve) => setTimeout(resolve, 0))
+      })
+    }
+
+    beforeEach(() => {
+      window.URL.createObjectURL = jest.fn(() => "blob:csv-file")
+      window.URL.revokeObjectURL = jest.fn()
+      anchorClick = jest.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(() => {})
+    })
+
+    afterEach(() => {
+      window.URL.createObjectURL = originalCreateObjectURL
+      window.URL.revokeObjectURL = originalRevokeObjectURL
+      anchorClick.mockRestore()
+    })
+
+    test("Export function gets called when download button is clicked", async () => {
+      act(() => {
+        render(table_component(), containHolder)
+      })
+
+      expect(downloadFunc).not.toBeCalled()
+      await clickExport()
+      expect(downloadFunc).toBeCalled()
+    })
+
+    test("downloads the CSV through a temporary link", async () => {
+      act(() => {
+        render(table_component(), containHolder)
+      })
+
+      await clickExport()
+
+      expect(window.URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob))
+      expect(anchorClick).toHaveBeenCalledTimes(1)
+      const link = anchorClick.mock.instances[0]
+      expect(link.getAttribute("href")).toBe("blob:csv-file")
+      expect(link.getAttribute("download")).toBe("download.csv")
+      expect(window.URL.revokeObjectURL).toHaveBeenCalledWith("blob:csv-file")
+      expect(document.body.contains(link)).toBe(false)
+    })
+
+    test("a failed export is logged instead of becoming an unhandled rejection", async () => {
+      const errorSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+      window.URL.createObjectURL = jest.fn(() => { throw new Error("blocked") })
+      act(() => {
+        render(table_component(), containHolder)
+      })
+
+      await clickExport()
+
+      expect(errorSpy).toHaveBeenCalledWith("react-tailwind-table: CSV export failed.", expect.any(Error))
+      errorSpy.mockRestore()
+    })
   })
 
 
