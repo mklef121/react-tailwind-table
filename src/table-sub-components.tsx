@@ -112,7 +112,7 @@ export function TableHead(props: Ithead) {
 		return column.use_in_display !== false;
 	});
 
-	return <tr className={"rtt-head-row bg-yellow-50 text-start "+props.row_style} >
+	return <tr className={"bg-yellow-50 text-left rtl:text-right "+props.row_style} >
 
 		{
 			props.use_bulk_action &&
@@ -327,16 +327,16 @@ export function Footer(props: Ifooter) {
 			</p>
 			</div>
 
-			<div className="flex rounded overflow-hidden border mt-2 md:mt-0 w-full md:w-auto">
+			<div className="flex rounded overflow-hidden border border-gray-200 mt-2 md:mt-0 w-full md:w-auto">
 
-				<div className={`back-button text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-e 
+				<div className={`back-button text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-e border-gray-200 
 							  ${paginated_map[active_page].back_button_clickable ?
 							  ' cursor-pointer ' : ' cursor-not-allowed '} 
 							  ${paginated_map[active_page].back_button_clickable ?'text-gray-700' : 'text-gray-400'} 
 							  `+number_box_Style}
 					 onClick={() => nextBackBtnClick('bck')}>
 					<p>
-						<svg className="rtt-arrow-back fill-current" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<svg className="transform rotate-180 rtl:rotate-0 fill-current" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M0.772277 9.90938L0.837937 9.85312L5.73111 5.60312C5.89682 5.45937 6 5.24375 6 5.00313C6 4.7625 5.89369 4.54688 5.73111 4.40312L0.847317 0.15625L0.766024 0.0843749C0.687858 0.0312499 0.59406 0 0.494007 0C0.221991 0 0 0.23125 0 0.51875V9.48125C0 9.76875 0.221991 10 0.494007 10C0.597186 10 0.694111 9.96562 0.772277 9.90938Z" />
 						</svg>
 					</p>
@@ -381,14 +381,14 @@ export function Footer(props: Ifooter) {
 
 
 
-				<div className={`next-button text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-e 
+				<div className={`next-button text-sm w-7 h-7 md:w-8 md:h-8 flex items-center justify-around border-e border-gray-200 
 							  ${paginated_map[active_page].forward_button_clickable ?
 							  ' cursor-pointer ' : ' cursor-not-allowed '} 
 							  ${paginated_map[active_page].forward_button_clickable ?'text-gray-700' : 'text-gray-400'} 
 							  `+number_box_Style}
 					onClick={() => nextBackBtnClick('nxt')}>
 					<p >
-						<svg className="rtt-arrow-next fill-current" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<svg className="transform rtl:rotate-180 fill-current" width="6" height="10" viewBox="0 0 6 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 							<path d="M0.772277 9.90938L0.837937 9.85312L5.73111 5.60312C5.89682 5.45937 6 5.24375 6 5.00313C6 4.7625 5.89369 4.54688 5.73111 4.40312L0.847317 0.15625L0.766024 0.0843749C0.687858 0.0312499 0.59406 0 0.494007 0C0.221991 0 0 0.23125 0 0.51875V9.48125C0 9.76875 0.221991 10 0.494007 10C0.597186 10 0.694111 9.96562 0.772277 9.90938Z" />
 						</svg>
 					</p>
@@ -494,7 +494,7 @@ function ActivePageEnding(props:IPageNumberGroup) {
 
 function DottedBox() {
 
-	return <div className="w-7 h-7 md:w-8 md:h-8 flex flex-grow items-center justify-around border-e ">
+	return <div className="w-7 h-7 md:w-8 md:h-8 flex flex-grow items-center justify-around border-e border-gray-200 ">
 		<p className="text-sm text-gray-700 ">
 			<span className="hidden md:flex"> . . . </span>
 			<span className="flex md:hidden"> ... </span>
@@ -512,7 +512,7 @@ export interface IBoxNumber{
 
 function NumberBox(props: IBoxNumber) {
 	return <div className={`text-sm w-7 h-7 md:w-8 md:h-8 flex items-center flex-grow flex-shrink 
-							md:flex-shrink-0 justify-around border-e cursor-pointer 
+							md:flex-shrink-0 justify-around border-e border-gray-200 cursor-pointer 
 							${props.is_active_page ? props.bg_color : ''}
 							${props.is_active_page ? ' text-white ' : ''}`+ props.style}
 		onClick={() => props.pageClick(props.page_number)}>

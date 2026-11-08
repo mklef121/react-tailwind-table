@@ -60,14 +60,40 @@ npm install --save react-tailwind-table
 ```
 
 ## Usage
-This component also exports a tiny css file built by tailwind. All css classes used in designing and customizing the table component are all custom tailwind classes which ensures that an existing tailwind project would not need to include this css file again.
+The table is styled with standard Tailwind CSS classes. How you get those styles depends on whether your project already uses Tailwind.
 
 ### Tailwind Project
-A tailwind project would just need to import the react component using `import Table from 'react-tailwind-table'`
+Tailwind only generates the classes it finds in the files it scans, and it does not scan `node_modules` by default. Tell it to scan this package, otherwise the table will look unstyled (often only in production builds, where unused classes are removed).
+
+**Tailwind v4**: add a `@source` line to the CSS file that imports Tailwind (the path is relative to that CSS file):
+
+```css
+@import "tailwindcss";
+@source "../node_modules/react-tailwind-table/dist";
+```
+
+**Tailwind v3** (v3.3 or newer): add the package to `content` in `tailwind.config.js`:
+
+```js
+module.exports = {
+  content: [
+    './src/**/*.{js,jsx,ts,tsx}',
+    './node_modules/react-tailwind-table/dist/*.js',
+  ],
+}
+```
+
+Then import the component only. Do **not** import `react-tailwind-table/dist/index.css` in a Tailwind project: it is a complete Tailwind stylesheet of its own and will conflict with yours.
+
+```tsx
+import Table from 'react-tailwind-table'
+```
 
 ### None Tailwind Project
-None tailwind users can import this component in any react project of choice, no matter if they are using a css library or not. This can easily be achieved with two lines of code.
+None tailwind users can import this component in any react project of choice, no matter if they are using a css library or not. Import the component and its CSS file:
 `import Table from 'react-tailwind-table'` and `import 'react-tailwind-table/dist/index.css'`
+
+This is also the way to go for projects on Tailwind older than v3.3.
 
 ```tsx
 import React, { Component } from 'react'
