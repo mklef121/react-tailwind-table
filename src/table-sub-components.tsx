@@ -540,6 +540,7 @@ async function processDownload(paginated_data: IPaginated, colums: Icolumn[],fil
 
 	// @ts-ignore
 	if (window.navigator.msSaveOrOpenBlob)  // IE hack; see http://msdn.microsoft.com/en-us/library/ie/hh779016.aspx
+		// @ts-ignore
 		window.navigator.msSaveBlob(blob, file_name);
 	else {
 		var link = document.createElement("a");
