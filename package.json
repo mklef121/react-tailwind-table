@@ -66,6 +66,7 @@
     "dist"
   ],
   "release": {
+    "repositoryUrl": "git@github.com:mklef121/react-tailwind-table.git",
     "branches": [
       "master"
     ],
