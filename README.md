@@ -474,6 +474,8 @@ To customize any section of this 4 parts, the `styling` props takes quite a larg
 
 > **NOTE** these customizations happens by appending your self defined class into each section of the table. So in case your desired effect does not take place, you can super-impose by adding a `!inmportant` in your class declaration. The `base_bg_color` and  `base_text_color` color below controls the current coloring of the table.
 
+> **NOTE** for projects without Tailwind: `dist/index.css` only contains the classes the table itself uses, so other Tailwind classes (e.g. `bg-green-600`) will have no effect. Pass your own CSS classes instead, e.g. `base_bg_color: "my-brand-bg"`.
+
 ```ts
 interface ItableStyle {
 	base_bg_color?: string, //defaults to  bg-pink-700
