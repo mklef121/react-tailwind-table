@@ -220,7 +220,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 		//Also don't show the bulk select if then user did not send in an array of `bulk_select_options` props
 		const useBulk = this.state.page_number_list.length < 1 ?
 			false : (this.props.bulk_select_options as string[]).length > 0 ? true : false
-		return <div dir={this.props.dir} className={`bg-white w-full flex flex-col pb-5 ${styling.main ?? ''}`} style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
+		return <div dir={this.props.dir} className={`bg-white w-full flex flex-col ${this.props.show_footer ? "pb-5" : ""} ${styling.main ?? ''}`} style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
 			{/* Table Caption*/
 				this.props.show_top && this.props.table_header && <TableCaption text={this.props.table_header} style={styling?.top?.title ?? ""} />
 			}
