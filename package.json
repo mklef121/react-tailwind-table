@@ -29,6 +29,9 @@
   "peerDependencies": {
     "react": "^17.0.2"
   },
+  "dependencies": {
+    "prop-types": "^15.8.1"
+  },
   "devDependencies": {
     "@semantic-release/git": "^11.0.1",
     "@tailwindcss/postcss7-compat": "^2.0.4",
@@ -55,7 +58,6 @@
     "postcss": "^7.0.35",
     "postcss-cli": "^7.1.1",
     "prettier": "^2.0.4",
-    "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-scripts": "^3.4.1",
