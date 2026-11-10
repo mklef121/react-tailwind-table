@@ -226,6 +226,45 @@ describe('Table Component ', () => {
     })
   })
 
+  describe("Hide top and footer", () => {
+    const people = Array.from({ length: 12 }, (_, i) => ({ name: "Person " + i }))
+    const people_cols = [{ field: "name", use: "Name" }]
+
+    it("shows the top and footer by default", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} table_header="Title" />, containHolder)
+      })
+      expect(containHolder.querySelector(".react-table-top-caption")).not.toBeNull()
+      expect(containHolder.querySelector(".react-table-top")).not.toBeNull()
+      expect(containHolder.querySelector(".next-button")).not.toBeNull()
+    })
+
+    it("hides the caption and top row with show_top={false}", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} table_header="Title" show_top={false} />, containHolder)
+      })
+      expect(containHolder.querySelector(".react-table-top-caption")).toBeNull()
+      expect(containHolder.querySelector(".react-table-top")).toBeNull()
+      expect(containHolder.querySelector("table")).not.toBeNull()
+    })
+
+    it("hides the statistics and pagination with show_footer={false}", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} show_footer={false} />, containHolder)
+      })
+      expect(containHolder.querySelector(".next-button")).toBeNull()
+      expect(containHolder.textContent).not.toContain("Showing")
+      expect(containHolder.querySelectorAll("tbody tr").length).toBe(10)
+    })
+
+    it("does not render an empty top row when search, export and bulk are off", () => {
+      act(() => {
+        render(<Table columns={people_cols} rows={people} show_search={false} should_export={false} />, containHolder)
+      })
+      expect(containHolder.querySelector(".react-table-top")).toBeNull()
+    })
+  })
+
   describe("Table head tests", ()=>{
 
     it("shows exact column as described it col prop",()=>{

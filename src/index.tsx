@@ -222,11 +222,11 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 			false : (this.props.bulk_select_options as string[]).length > 0 ? true : false
 		return <div dir={this.props.dir} className={`bg-white w-full flex flex-col pb-5 ${styling.main ?? ''}`} style={{ "boxShadow": "0px 2px 8px rgba(0, 0, 0, 0.04)" }}>
 			{/* Table Caption*/
-				this.props.table_header && <TableCaption text={this.props.table_header} style={styling?.top?.title ?? ""} />
+				this.props.show_top && this.props.table_header && <TableCaption text={this.props.table_header} style={styling?.top?.title ?? ""} />
 			}
 
 			{
-				<TableTop style={styling?.top?.elements?.main ?? ""}>
+				this.props.show_top && <TableTop style={styling?.top?.elements?.main ?? ""}>
 					{ this.props.show_search && 
 						<TableSearch onSearch={this.onSearch} placeholder={this.props.search_placeholder as string}
 										 style={styling?.top?.elements?.search ?? ""} />}
@@ -292,7 +292,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 				</tbody>
 			</table>
 		</div>
-			<Footer page_number_list={this.state.page_number_list}
+			{this.props.show_footer && <Footer page_number_list={this.state.page_number_list}
 				paginated_map={this.state.paginated_map}
 				active_page={this.state.active_page_number}
 				total_pages={this.getTotalPages()}
@@ -302,7 +302,7 @@ export default class ReactTailwindTable extends React.Component<Iprop, Istate> {
 				main_style = {styling?.footer?.main ?? ""} 
 				statistics_main_style = {styling?.footer?.statistics?.main ?? ""}
 				statistics_number_style = {styling?.footer?.statistics?.bold_numbers ?? ""} 
-				number_box_Style = {styling?.footer?.page_numbers ?? ""}/>
+				number_box_Style = {styling?.footer?.page_numbers ?? ""}/>}
 		</div>
 	}
 
@@ -350,6 +350,8 @@ ReactTailwindTable.propTypes = {
 	*/
 
 	show_search: PropTypes.bool,
+	show_top: PropTypes.bool,
+	show_footer: PropTypes.bool,
 	should_export: PropTypes.bool,
 	// use_server_side: PropTypes.bool,
 	debounce_search: PropTypes.number,
@@ -404,6 +406,8 @@ ReactTailwindTable.defaultProps = {
 	per_page: 10,
 	debounce_search: 300,
 	show_search: true,
+	show_top: true,
+	show_footer: true,
 	should_export: true,
 	bulk_select_options: [],
 	export_text: 'Export',

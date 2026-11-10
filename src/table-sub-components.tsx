@@ -196,7 +196,7 @@ export function TableExport(props: IexportProps) {
 export function TableTop(props: { children?: React.ReactNode, style:string }) {
 	return <Fragment>
 		{
-			props.children && <div className={"flex flex-col md:flex-row md:items-center py-2 justify-between px-4 mt-4 mb-2 react-table-top "+props.style} >
+			React.Children.toArray(props.children).length > 0 && <div className={"flex flex-col md:flex-row md:items-center py-2 justify-between px-4 mt-4 mb-2 react-table-top "+props.style} >
 				{props.children}
 			</div>
 		}
