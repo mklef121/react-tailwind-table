@@ -35,6 +35,10 @@ export interface Iprop {
 	debounce_search?: number,
 	table_header?: string,
 	show_search?: boolean,
+	/** Shows the caption and the search, bulk action and export row. Defaults to true */
+	show_top?: boolean,
+	/** Shows the statistics and pagination. Defaults to true */
+	show_footer?: boolean,
 	should_export?: boolean,
 	// use_server_side?: any,
 	// total_page_count?: number,

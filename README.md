@@ -36,6 +36,7 @@ A few features that comes with this table include
     - [On Search Callback](#on-search-callback)
   	- [No Content Message](#no-content-message),
   	- [Hide Search](#hide-search)
+    - [Hide Table Top and Footer](#hide-table-top-and-footer)
     - [Should Export](#should-export)
     - [Export Text](#export-text)
     - [CSV Export File Name](#csv-export-file-name)
@@ -130,6 +131,8 @@ interface Iprop {
 	no_content_text?: React.ReactNode, 
 	debounce_search?: number,
 	show_search?: boolean,
+	show_top?: boolean,
+	show_footer?: boolean,
 	should_export?: boolean,
 	export_text?: string,
 	bulk_select_options?: string[],
@@ -344,6 +347,17 @@ When there is no data to display (rows props is empty), the `No Data Availaible`
 ### Hide Search
 
 By default, the search input form is visible, to hide it, pass a `false` to the `show_search` prop.
+
+
+### Hide Table Top and Footer
+
+To display only the table, hide the top (caption, search, bulk action and export) with `show_top={false}` and the footer (statistics and pagination) with `show_footer={false}`. Both default to `true`.
+
+```jsx
+<Table columns={columns} rows={rows} show_top={false} show_footer={false} per_page={rows.length} />
+```
+
+Rows are still paginated by `per_page` when the footer is hidden, so set `per_page` to `rows.length` to show every row.
 
 
 ### Should Export
