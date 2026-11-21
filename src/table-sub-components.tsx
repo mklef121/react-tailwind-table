@@ -36,7 +36,7 @@ export interface ItableRow {
 export function TableRow(props: ItableRow) {
 
 	return (
-		<tr className={`${props.is_hovered ? "hover:bg-gray-50 ":""} 
+		<tr className={`${props.is_hovered ? "hover:bg-gray-200 ":""} 
 						${props.is_bordered ? "border-b border-gray-200 ":""} 
 						${utilsClass.isEven(props.index + 1) && props.is_striped? 'bg-gray-50 ' : ''}`
 						+ props.row_style}>
