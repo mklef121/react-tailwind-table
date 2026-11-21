@@ -398,7 +398,7 @@ Borrowing a concept from boostrap tables: To have the table with a striped bg-gr
 
 ### Hover Indicator
 
-A `bg-gray-50` color can be applied on a row when the mouse hovered over it. Control this by passing a boolean to the `hovered` prop. It defaults to `true`.
+A `bg-gray-200` color can be applied on a row when the mouse hovered over it. Control this by passing a boolean to the `hovered` prop. It defaults to `true`.
 
 
 ### Table With and Without Borders

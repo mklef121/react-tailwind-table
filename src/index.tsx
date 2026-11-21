@@ -374,6 +374,7 @@ ReactTailwindTable.propTypes = {
 	bulk_select_options: PropTypes.arrayOf(PropTypes.string),
 	striped: PropTypes.bool,
 	bordered: PropTypes.bool,
+	hovered: PropTypes.bool,
 	styling: PropTypes.shape({
 		base_bg_color: PropTypes.string,
 		base_text_color: PropTypes.string,
